@@ -1,0 +1,91 @@
+{
+  "project_info": {
+    "project_number": "938450961498",
+    "firebase_url": "https://checkin-b1252-default-rtdb.firebaseio.com",
+    "project_id": "checkin-b1252",
+    "storage_bucket": "checkin-b1252.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:938450961498:android:7ae8f3b48b467d348c4463",
+        "android_client_info": {
+          "package_name": "com.cli_checkin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "938450961498-c2rpgtlom19vmoibacil4pbg7qavoith.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2FYSNOpEAGeT9CRw9lrKQ9_EqRod8Z1c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "938450961498-c2rpgtlom19vmoibacil4pbg7qavoith.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "938450961498-14frimcgre2h8gkqe1fn5bujibncfoeg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.rn-Checkin"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:938450961498:android:f19d5a40b8b060038c4463",
+        "android_client_info": {
+          "package_name": "com.rn_checkin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "938450961498-l1nn27887jc6gd1e4do98jaamon31agk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rn_checkin",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "938450961498-c2rpgtlom19vmoibacil4pbg7qavoith.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2FYSNOpEAGeT9CRw9lrKQ9_EqRod8Z1c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "938450961498-c2rpgtlom19vmoibacil4pbg7qavoith.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "938450961498-14frimcgre2h8gkqe1fn5bujibncfoeg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.rn-Checkin"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
