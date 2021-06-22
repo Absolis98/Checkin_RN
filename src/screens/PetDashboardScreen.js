@@ -14,13 +14,13 @@ import {PetContext} from '../context/PetContext';
 import {UserContext} from '../context/UserContext';
 
 const dayKey = {
-  Sun: 6,
-  Mon: 5,
-  Tue: 4,
-  Wed: 3,
-  Thu: 2,
-  Fri: 1,
-  Sat: 0,
+  Mon: 6,
+  Tue: 5,
+  Wed: 4,
+  Thu: 3,
+  Fri: 2,
+  Sat: 1,
+  Sun: 0,
 };
 
 const ActionsCard = ({dayActions}) => {
@@ -207,23 +207,53 @@ const PetDashboardScreen = ({route, navigation}) => {
                 Weight:{' '}
                 <Text style={{fontWeight: 'normal'}}>{pet.weight} lbs</Text>{' '}
               </Text>
-              <TouchableOpacity
-                onPress={() => navigation.push('UpdatePetScreen', {pet: pet})}>
-                <View
-                  style={{
-                    backgroundColor: 'pink',
-                    marginTop: 10,
-                    marginBottom: 3,
-                    borderRadius: 7,
-                    paddingVertical: 4,
-                    borderWidth: 1,
-                    borderColor: 'rgba(0,0,0,0.2)',
-                  }}>
-                  <Text style={{fontSize: 15, textAlign: 'center'}}>
-                    Edit Info
-                  </Text>
-                </View>
-              </TouchableOpacity>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-evenly',
+                  flex: 1,
+                }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.push('UpdatePetScreen', {pet: pet})
+                  }>
+                  <View
+                    style={{
+                      backgroundColor: 'pink',
+                      marginTop: 10,
+                      marginBottom: 3,
+                      borderRadius: 7,
+                      paddingVertical: 4,
+                      borderWidth: 1,
+                      borderColor: 'rgba(0,0,0,0.2)',
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{fontSize: 15, textAlign: 'center'}}>
+                      Edit Info
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.push('UpdatePetScreen', {pet: pet})
+                  }>
+                  <View
+                    style={{
+                      backgroundColor: 'pink',
+                      marginTop: 10,
+                      marginBottom: 3,
+                      borderRadius: 7,
+                      paddingVertical: 4,
+                      borderWidth: 1,
+                      borderColor: 'rgba(0,0,0,0.2)',
+                      paddingHorizontal: 10,
+                    }}>
+                    <Text style={{fontSize: 15, textAlign: 'center'}}>
+                      Add to Group
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
           <Modal
@@ -315,6 +345,8 @@ const styles = StyleSheet.create({
   },
   subHeader: {
     marginLeft: 25,
+    marginRight: 7,
+    flex: 1,
   },
   body: {
     flex: 3,

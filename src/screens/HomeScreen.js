@@ -17,6 +17,9 @@ import {UserContext} from '../context/UserContext';
 import {AuthContext} from '../context/AuthContext';
 
 const HomeScreen = ({navigation}) => {
+  const isHermes = () => !!global.HermesInternal;
+  console.log('is hermes running?');
+  console.log(isHermes());
   console.log('running');
 
   const {authUser} = useContext(AuthContext);
@@ -309,7 +312,7 @@ const HomeScreen = ({navigation}) => {
                   onPress={() => null}
                   style={{
                     height: '25%',
-                    backgroundColor: '#DEDEDE',
+                    backgroundColor: 'white',
                     borderTopLeftRadius: 25,
                     borderTopRightRadius: 25,
                   }}>
@@ -458,7 +461,9 @@ const HomeScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
       ) : (
-        console.log('nothing')
+        <View>
+          <Text>Loading...</Text>
+        </View>
       )}
     </SafeAreaView>
   );

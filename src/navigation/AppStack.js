@@ -30,6 +30,7 @@ import PetActionScreen from '../screens/PetActionScreen';
 import Header from '../components/Header';
 
 import SettingsScreen from '../screens/SettingsScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
 
 const HomeStack = createStackNavigator();
 const SettingsStack = createStackNavigator();
@@ -188,6 +189,11 @@ const SettingsStackScreen = () => (
       options={{
         title: 'Settings',
       }}
+    />
+    <SettingsStack.Screen
+      name="EditProfileScreen"
+      component={EditProfileScreen}
+      options={{title: 'Edit Profile'}}
     />
   </SettingsStack.Navigator>
 );

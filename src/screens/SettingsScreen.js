@@ -5,7 +5,7 @@ import {
   Button,
   StyleSheet,
   SafeAreaView,
-  ImageBackground,
+  Image,
   TouchableOpacity,
 } from 'react-native';
 
@@ -37,17 +37,17 @@ const SettingsScreen = ({navigation}) => {
           <Text style={{fontSize: 25}}>{authUser.displayName}</Text>
           <View style={[styles.button]}>
             {user.imageURL !== undefined ? (
-              <ImageBackground
+              <Image
                 // style={styles.avatar}
-                style={{width: 100, height: 100}}
-                imageStyle={{borderRadius: 100}}
-                source={{uri: user.imageURL}}></ImageBackground>
+                style={{width: 100, height: 100, borderRadius: 100}}
+                source={{uri: user.imageURL}}
+              />
             ) : (
-              <ImageBackground
+              <Image
                 // style={styles.avatar}
-                style={{width: 100, height: 100}}
-                imageStyle={{borderRadius: 100}}
-                source={require('../assets/owner.png')}></ImageBackground>
+                style={{width: 100, height: 100, borderRadius: 100}}
+                source={require('../assets/owner.png')}
+              />
             )}
           </View>
           <Text style={{fontSize: 17, marginTop: 5}}>
@@ -60,29 +60,60 @@ const SettingsScreen = ({navigation}) => {
             Co-Owners: {user.ownersList.length}
           </Text>
         </View>
-      </View>
-
-      <TouchableOpacity
-        style={{
-          alignItems: 'center',
-          justifyContent: 'center',
-          paddingVertical: 12,
-          marginBottom: 10,
-          borderRadius: 15,
-          marginHorizontal: 40,
-          borderWidth: 5,
-          borderColor: 'rgb(220,53,69)',
-        }}
-        onPress={() => {
-          logout();
-        }}>
-        <View>
-          <Text
-            style={{color: 'rgb(220,53,69)', fontSize: 20, fontWeight: '500'}}>
-            Logout
-          </Text>
+        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              paddingVertical: 12,
+              marginTop: 10,
+              borderRadius: 15,
+              marginLeft: 20,
+              marginRight: 5,
+              shadowColor: 'rgba(0,0,0, .4)', // IOS
+              shadowOffset: {height: 1, width: 1}, // IOS
+              shadowOpacity: 1, // IOS
+              shadowRadius: 1, //IOS
+              elevation: 2, // Android
+              backgroundColor: 'white',
+            }}
+            onPress={() => {
+              navigation.push('EditProfileScreen', {
+                username: user.username,
+                imageURL: user.imageURL,
+              });
+            }}>
+            <Text>Edit Profile</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              paddingVertical: 12,
+              marginTop: 10,
+              borderRadius: 15,
+              marginLeft: 5,
+              marginRight: 20,
+              borderWidth: 5,
+              backgroundColor: 'white',
+              borderColor: 'rgb(220,53,69)',
+            }}
+            onPress={() => {
+              logout();
+            }}>
+            <Text
+              style={{
+                color: 'rgb(220,53,69)',
+                fontSize: 20,
+                fontWeight: '500',
+              }}>
+              Logout
+            </Text>
+          </TouchableOpacity>
         </View>
-      </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -96,7 +127,6 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     borderRadius: 100,
-    backgroundColor: 'skyblue',
   },
   headerText: {
     fontWeight: '600',

@@ -47,6 +47,16 @@ export const UserProvider = ({children}) => {
         console.log(e);
       }
     },
+    updateUserData: async (username, imageURL) => {
+      try {
+        await firestore()
+          .collection('users')
+          .doc(user.userId)
+          .update({username: username, imageURL: imageURL});
+      } catch (e) {
+        console.log(e);
+      }
+    },
     addCoOwner: async (user, coOnwerEmail) => {
       try {
         if (user.email !== coOnwerEmail) {
