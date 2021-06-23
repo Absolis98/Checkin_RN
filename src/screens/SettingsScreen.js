@@ -34,9 +34,9 @@ const SettingsScreen = ({navigation}) => {
             shadowRadius: 1, //IOS
             elevation: 2, // Android
           }}>
-          <Text style={{fontSize: 25}}>{authUser.displayName}</Text>
+          <Text style={{fontSize: 25}}>{user.username}</Text>
           <View style={[styles.button]}>
-            {user.imageURL !== undefined ? (
+            {user.imageURL ? (
               <Image
                 // style={styles.avatar}
                 style={{width: 100, height: 100, borderRadius: 100}}
@@ -82,6 +82,7 @@ const SettingsScreen = ({navigation}) => {
               navigation.push('EditProfileScreen', {
                 username: user.username,
                 imageURL: user.imageURL,
+                userId: authUser.uid,
               });
             }}>
             <Text>Edit Profile</Text>

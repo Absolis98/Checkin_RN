@@ -148,7 +148,7 @@ const CreateGroupScreen = ({navigation, route}) => {
       }
       ownersList[authUser.uid] = {
         ownerId: authUser.uid,
-        username: authUser.displayName,
+        username: user.username,
       };
       for (let i = 0; i < addingPetsList.length; i++) {
         petsList[addingPetsList[i].petId] = addingPetsList[i];

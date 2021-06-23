@@ -12,15 +12,17 @@ import {
   ActivityIndicator,
   Platform,
 } from 'react-native';
-import {Authcontext} from '../context/AuthContext';
+import {AuthContext} from '../context/AuthContext';
 import {UserContext} from '../context/UserContext';
 import ImagePicker from 'react-native-image-crop-picker';
+import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 
-const EditProfileScreen = ({route}) => {
-  const {username, imageURL} = route.params;
+const EditProfileScreen = ({route, navigation}) => {
+  const {username, imageURL, userId} = route.params;
 
   const {updateUserData} = useContext(UserContext);
+  const {changeDisplayName} = useContext(AuthContext);
 
   const [name, setUsername] = useState(username);
   const originalImage = imageURL;
@@ -62,7 +64,7 @@ const EditProfileScreen = ({route}) => {
   };
 
   // might have to check for default image (dog, cat, other)
-  const uploadImage = async () => {
+  const uploadImage = async (image) => {
     if (!image) return null;
     if (originalImage == image) {
       return image;
@@ -77,7 +79,7 @@ const EditProfileScreen = ({route}) => {
     setUploading(true);
     setTransferred(0);
 
-    const storageRef = storage().ref(`petPhotos/${filename}`);
+    const storageRef = storage().ref(`ownerPhotos/${filename}`);
     const task = storageRef.putFile(uploadUri);
 
     task.on('state_changed', (taskSnapshot) => {
@@ -102,9 +104,67 @@ const EditProfileScreen = ({route}) => {
     }
   };
 
-  const submitForm = async () => {
+  const submitForm = async (username, image) => {
     try {
-      const imageURL = await uploadImage();
+      const imageURL = await uploadImage(image);
+      //   const imageURL = null;
+
+      const batch = firestore().batch();
+
+      const userRef = firestore().collection('users').doc(userId);
+
+      batch.update(userRef, {
+        username: username,
+        imageURL: imageURL,
+      });
+      console.log('pass 0');
+
+      await firestore()
+        .collection('users')
+        .where(`ownersList.${userId}.ownerId`, '==', userId)
+        .get()
+        .then(async (querySnapshot) => {
+          if (!querySnapshot.empty) {
+            querySnapshot.docs.forEach((doc) => {
+              console.log('hahahahahahhahahahahahh');
+              console.log(doc.ref);
+              let docRef = doc.ref;
+              batch.update(docRef, {
+                [`ownersList.${userId}.username`]: username,
+                [`ownersList.${userId}.imageURL`]: imageURL,
+              });
+            });
+          } else {
+            console.log('does not exist');
+          }
+        });
+      console.log('pass 1');
+
+      await firestore()
+        .collection('groups')
+        .where(`ownersList.${userId}.ownerId`, '==', userId)
+        .get()
+        .then(async (querySnapshot) => {
+          if (!querySnapshot.empty) {
+            querySnapshot.docs.forEach((doc) => {
+              let docRef = doc.ref;
+              batch.update(docRef, {
+                [`ownersList.${userId}.username`]: username,
+                [`ownersList.${userId}.imageURL`]: imageURL,
+              });
+            });
+          } else {
+            console.log('does not exist');
+          }
+        });
+      console.log('pass 2');
+
+      batch.commit().catch((error) => {
+        console.log('Something went wrong during the batch write: ' + error);
+      });
+      console.log('pass 3');
+
+      navigation.pop();
     } catch (e) {
       console.log(e);
     }
@@ -115,7 +175,7 @@ const EditProfileScreen = ({route}) => {
       <TouchableOpacity
         style={styles.avatar}
         onPress={() => setPhotoModalVisible(true)}>
-        {image !== undefined ? (
+        {image ? (
           <Image
             // style={styles.avatar}
             style={{width: 125, height: 125, borderRadius: 100}}
@@ -167,6 +227,7 @@ const EditProfileScreen = ({route}) => {
           }}
           onPress={() => {
             console.log('save');
+            submitForm(name, image);
             // navigation.pop();
             // navigation.push('PetDashboardScreen', {
             //   petId: petId,
@@ -205,30 +266,36 @@ const EditProfileScreen = ({route}) => {
           <Pressable
             onPress={() => null}
             style={{
-              height: '40%',
+              height: '22%',
               backgroundColor: 'white',
               borderTopLeftRadius: 25,
               borderTopRightRadius: 25,
             }}>
             <View>
-              <Button
-                title="Cancel"
-                onPress={() => {
-                  setPhotoModalVisible(!isAddPhotoModalVisible);
-                }}
-              />
-              <Button
-                title="Take Photo"
+              <TouchableOpacity
+                style={styles.modalBtn}
                 onPress={() => {
                   takePhotoFromCamera();
-                }}
-              />
-              <Button
-                title="Choose From Library"
+                }}>
+                <Text style={[styles.modalBtnText, {marginTop: 6}]}>
+                  Take Photo
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.modalBtn}
                 onPress={() => {
                   choosePhotoFromLibrary();
-                }}
-              />
+                }}>
+                <Text style={styles.modalBtnText}>Choose From Library</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalBtn}
+                onPress={() => {
+                  setPhotoModalVisible(!isAddPhotoModalVisible);
+                }}>
+                <Text style={styles.modalBtnText}>Cancel</Text>
+              </TouchableOpacity>
             </View>
           </Pressable>
         </Pressable>
@@ -269,6 +336,16 @@ const styles = StyleSheet.create({
     width: '100%',
     paddingLeft: 30,
     // marginRight: '75%',
+  },
+  modalBtnText: {
+    fontSize: 19,
+    textAlign: 'center',
+    color: 'rgb(40,113,247)',
+  },
+  modalBtn: {
+    paddingVertical: 9,
+    marginVertical: 1,
+    width: '100%',
   },
 });
 

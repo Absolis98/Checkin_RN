@@ -16,6 +16,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import {AuthContext} from '../context/AuthContext';
+import {UserContext} from '../context/UserContext';
 import RadioButtonGroup from '../components/RadioButtonGroup';
 
 const petActions = (species) => {
@@ -203,8 +204,9 @@ const petActions = (species) => {
   }
 };
 
-const CreatePetScreen = ({navigation}) => {
+const CreatePetScreen = ({navigation, route}) => {
   const {authUser} = useContext(AuthContext);
+  const {user} = useContext(UserContext);
 
   const [isAddPhotoModalVisible, setVisible] = useState(false);
 
@@ -315,12 +317,6 @@ const CreatePetScreen = ({navigation}) => {
         // petId: firestore.FieldPath.documentId(),
         petId: petId,
         imageURL: imageUrl,
-        ownerIds: {
-          [authUser.uid]: {
-            username: authUser.disPlayName,
-            ownerId: authUser.uid,
-          },
-        },
         name: pet.name,
         species: pet.species,
         breed: pet.breed,

@@ -57,6 +57,15 @@ export const AuthProvider = ({children}) => {
         console.log(e);
       }
     },
+    changeDisplayName: async (username) => {
+      try {
+        authUser.updateProfile({
+          displayName: username,
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    },
   };
 
   return (

@@ -207,7 +207,7 @@ const HomeScreen = ({navigation}) => {
                             setSelectedOwnerId(item.ownerId);
                           }}>
                           <View style={styles.button}>
-                            {item.imageURL !== undefined ? (
+                            {item.imageURL ? (
                               <Image
                                 // style={styles.avatar}
                                 style={{

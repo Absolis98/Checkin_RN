@@ -104,7 +104,7 @@ const GroupsScreen = ({navigation}) => {
           borderColor: 'rgba(0,0,0,0.2)',
         }}
         onPress={() => {
-          navigation.push('CreateGroupScreen');
+          navigation.push('CreateGroupScreen', {username: user.username});
         }}>
         <View>
           <Text>Create New Group</Text>

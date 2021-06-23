@@ -52,7 +52,7 @@ const GroupsOverviewScreen = ({navigation, route}) => {
           <View style={styles.body}>
             <TouchableOpacity
               onPress={() => setImageModalVisable(!isImageModalVisible)}>
-              {group.imageURL !== null ? (
+              {group.imageURL ? (
                 <Image style={styles.avatar} source={{uri: group.imageURL}} />
               ) : (
                 <Image
@@ -140,7 +140,7 @@ const GroupsOverviewScreen = ({navigation, route}) => {
                           // onPress={() => navigation.push('OwnerDashboardScreen')}
                         >
                           <View style={styles.button}>
-                            {item.imageURL !== undefined ? (
+                            {item.imageURL ? (
                               <ImageBackground
                                 // style={styles.avatar}
                                 style={{width: 100, height: 100}}
