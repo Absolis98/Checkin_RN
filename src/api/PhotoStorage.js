@@ -11,13 +11,14 @@ import ImagePicker from 'react-native-image-crop-picker';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 
-const uploadButton = ({onPressUpload}) => {
+const UploadButton = ({onPressUpload, image, originalImage}) => {
   const [uploading, setUploading] = useState(false);
   const [transferred, setTransferred] = useState(0);
 
   // might have to check for default image (dog, cat, other)
-  const uploadImage = async (image) => {
-    if (image) {
+  const uploadImage = async (image, originalImage) => {
+    if (!image) return null;
+    if (originalImage == image) {
       return image;
     }
     const uploadUri = image;
@@ -30,7 +31,7 @@ const uploadButton = ({onPressUpload}) => {
     setUploading(true);
     setTransferred(0);
 
-    const storageRef = storage().ref(`petPhotos/${filename}`);
+    const storageRef = storage().ref(`ownerPhotos/${filename}`);
     const task = storageRef.putFile(uploadUri);
 
     task.on('state_changed', (taskSnapshot) => {
@@ -64,8 +65,11 @@ const uploadButton = ({onPressUpload}) => {
       ) : (
         <TouchableOpacity
           style={styles.updateBtn}
-          onPress={() => onPressUpload()}>
-          <Text>Update Pet</Text>
+          onPress={() => {
+            // const imageURL = await uploadImage(image, originalImage);
+            onPressUpload();
+          }}>
+          <Text>Save</Text>
         </TouchableOpacity>
       )}
     </View>
@@ -180,6 +184,8 @@ const styles = StyleSheet.create({
     // marginRight: '75%',
   },
   updateBtn: {
+    position: 'absolute',
+    bottom: 20,
     height: 40,
     width: '70%',
     margin: 20,
@@ -203,3 +209,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+export default UploadButton;

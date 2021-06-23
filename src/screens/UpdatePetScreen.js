@@ -6,9 +6,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
-  ImageBackground,
+  Image,
   Modal,
-  Button,
+  Pressable,
   Platform,
   ActivityIndicator,
 } from 'react-native';
@@ -201,17 +201,21 @@ const UpdatePetScreen = ({navigation, route}) => {
         alignItems: 'center',
         // backgroundColor: 'pink',
       }}>
-      <Text style={styles.title}>Picture</Text>
+      <Text style={[styles.inputTitle, {textAlign: 'center', paddingLeft: 0}]}>
+        Picture
+      </Text>
+
       <TouchableOpacity
         onPress={() => {
           setPhotoModalVisible(!isAddPhotoModalVisible);
         }}>
-        {image !== null ? (
-          <ImageBackground
+        {image ? (
+          <Image
             // style={styles.avatar}
-            style={[styles.avatar, {backgroundColor: 'white'}]}
-            imageStyle={{borderRadius: 100}}
-            source={{uri: image}}></ImageBackground>
+            style={styles.avatar}
+            imageStyle={{}}
+            source={{uri: image}}
+          />
         ) : (
           <View style={styles.avatar}>
             <Text>+</Text>
@@ -330,41 +334,69 @@ const UpdatePetScreen = ({navigation, route}) => {
         }}>
         <Text style={{color: 'white'}}>Delete</Text>
       </TouchableOpacity>
+
+      {isAddPhotoModalVisible || isAddPhotoModalVisible ? (
+        <View
+          style={{
+            backgroundColor: 'rgba(0,0,0, .4)',
+            height: '100%',
+            width: '100%',
+            position: 'absolute',
+          }}></View>
+      ) : null}
+
       <Modal
         animationType="slide"
         transparent={true}
         visible={isAddPhotoModalVisible}
-        // onRequestClose={() => {
-        //   // this.closeButtonFunction()
-        // }}
-      >
-        <View
+        onRequestClose={() => {
+          setPhotoModalVisible(false);
+        }}>
+        <Pressable
+          onPress={() => {
+            setPhotoModalVisible(false);
+          }}
           style={{
-            height: '40%',
+            height: '100%',
             marginTop: 'auto',
-            backgroundColor: 'lightblue',
+            justifyContent: 'flex-end',
           }}>
-          <View>
-            <Button
-              title="Cancel"
-              onPress={() => {
-                setPhotoModalVisible(!isAddPhotoModalVisible);
-              }}
-            />
-            <Button
-              title="Take Photo"
-              onPress={() => {
-                takePhotoFromCamera();
-              }}
-            />
-            <Button
-              title="Choose From Library"
-              onPress={() => {
-                choosePhotoFromLibrary();
-              }}
-            />
-          </View>
-        </View>
+          <Pressable
+            onPress={() => null}
+            style={{
+              height: '22%',
+              backgroundColor: 'white',
+              borderTopLeftRadius: 25,
+              borderTopRightRadius: 25,
+            }}>
+            <View>
+              <TouchableOpacity
+                style={styles.modalBtn}
+                onPress={() => {
+                  takePhotoFromCamera();
+                }}>
+                <Text style={[styles.modalBtnText, {marginTop: 6}]}>
+                  Take Photo
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.modalBtn}
+                onPress={() => {
+                  choosePhotoFromLibrary();
+                }}>
+                <Text style={styles.modalBtnText}>Choose From Library</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalBtn}
+                onPress={() => {
+                  setPhotoModalVisible(!isAddPhotoModalVisible);
+                }}>
+                <Text style={styles.modalBtnText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </Pressable>
+        </Pressable>
       </Modal>
     </ScrollView>
   );
@@ -387,8 +419,8 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0,0,0,0.2)',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 90,
-    height: 90,
+    width: 150,
+    height: 150,
     backgroundColor: '#fff',
     borderRadius: 100,
     backgroundColor: 'rgba(0,0,0,0.2)',
@@ -409,7 +441,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   inputTitle: {
-    fontSize: 22,
+    fontSize: 25,
     margin: 10,
     width: '100%',
     paddingLeft: 30,
@@ -437,6 +469,16 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: 'rgb(220,53,69)',
     alignItems: 'center',
+  },
+  modalBtnText: {
+    fontSize: 19,
+    textAlign: 'center',
+    color: 'rgb(40,113,247)',
+  },
+  modalBtn: {
+    paddingVertical: 9,
+    marginVertical: 1,
+    width: '100%',
   },
 });
 

@@ -8,8 +8,9 @@ import {
   ScrollView,
   Modal,
   Button,
-  ImageBackground,
+  Image,
   Platform,
+  Pressable,
   ActivityIndicator,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -208,7 +209,7 @@ const CreatePetScreen = ({navigation, route}) => {
   const {authUser} = useContext(AuthContext);
   const {user} = useContext(UserContext);
 
-  const [isAddPhotoModalVisible, setVisible] = useState(false);
+  const [isAddPhotoModalVisible, setPhotoModalVisible] = useState(false);
 
   const [image, setImage] = useState(null);
 
@@ -243,7 +244,7 @@ const CreatePetScreen = ({navigation, route}) => {
         console.log(image);
         const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
         setImage(imageUri);
-        setVisible(!isAddPhotoModalVisible);
+        setPhotoModalVisible(!isAddPhotoModalVisible);
       })
       .catch((e) => console.log(e));
   };
@@ -254,12 +255,13 @@ const CreatePetScreen = ({navigation, route}) => {
       height: 300,
       compressImageQuality: 0.7,
       cropping: true,
+      cropperCircleOverlay: true,
     })
       .then((image) => {
         console.log(image);
         const imageUri = Platform.OS === 'ios' ? image.sourceURL : image.path;
         setImage(imageUri);
-        setVisible(!isAddPhotoModalVisible);
+        setPhotoModalVisible(!isAddPhotoModalVisible);
       })
       .catch((e) => console.log(e));
   };
@@ -358,17 +360,20 @@ const CreatePetScreen = ({navigation, route}) => {
         alignItems: 'center',
         // backgroundColor: 'pink',
       }}>
-      <Text style={styles.title}>Picture</Text>
+      <Text style={[styles.inputTitle, {textAlign: 'center', paddingLeft: 0}]}>
+        Picture
+      </Text>
       <TouchableOpacity
         onPress={() => {
-          setVisible(!isAddPhotoModalVisible);
+          setPhotoModalVisible(!isAddPhotoModalVisible);
         }}>
-        {image !== null ? (
-          <ImageBackground
+        {image ? (
+          <Image
             // style={styles.avatar}
-            style={[styles.avatar, {backgroundColor: 'white'}]}
-            imageStyle={{borderRadius: 100}}
-            source={{uri: image}}></ImageBackground>
+            style={styles.avatar}
+            imageStyle={{}}
+            source={{uri: image}}
+          />
         ) : (
           <View style={styles.avatar}>
             <Text>+</Text>
@@ -478,41 +483,68 @@ const CreatePetScreen = ({navigation, route}) => {
         </TouchableOpacity>
       )}
 
+      {isAddPhotoModalVisible || isAddPhotoModalVisible ? (
+        <View
+          style={{
+            backgroundColor: 'rgba(0,0,0, .4)',
+            height: '100%',
+            width: '100%',
+            position: 'absolute',
+          }}></View>
+      ) : null}
+
       <Modal
         animationType="slide"
         transparent={true}
         visible={isAddPhotoModalVisible}
-        // onRequestClose={() => {
-        //   // this.closeButtonFunction()
-        // }}
-      >
-        <View
+        onRequestClose={() => {
+          setPhotoModalVisible(false);
+        }}>
+        <Pressable
+          onPress={() => {
+            setPhotoModalVisible(false);
+          }}
           style={{
-            height: '40%',
+            height: '100%',
             marginTop: 'auto',
-            backgroundColor: 'lightblue',
+            justifyContent: 'flex-end',
           }}>
-          <View>
-            <Button
-              title="Cancel"
-              onPress={() => {
-                setVisible(!isAddPhotoModalVisible);
-              }}
-            />
-            <Button
-              title="Take Photo"
-              onPress={() => {
-                takePhotoFromCamera();
-              }}
-            />
-            <Button
-              title="Choose From Library"
-              onPress={() => {
-                choosePhotoFromLibrary();
-              }}
-            />
-          </View>
-        </View>
+          <Pressable
+            onPress={() => null}
+            style={{
+              height: '22%',
+              backgroundColor: 'white',
+              borderTopLeftRadius: 25,
+              borderTopRightRadius: 25,
+            }}>
+            <View>
+              <TouchableOpacity
+                style={styles.modalBtn}
+                onPress={() => {
+                  takePhotoFromCamera();
+                }}>
+                <Text style={[styles.modalBtnText, {marginTop: 6}]}>
+                  Take Photo
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.modalBtn}
+                onPress={() => {
+                  choosePhotoFromLibrary();
+                }}>
+                <Text style={styles.modalBtnText}>Choose From Library</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalBtn}
+                onPress={() => {
+                  setPhotoModalVisible(!isAddPhotoModalVisible);
+                }}>
+                <Text style={styles.modalBtnText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </Pressable>
+        </Pressable>
       </Modal>
     </ScrollView>
   );
@@ -535,8 +567,8 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0,0,0,0.2)',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 90,
-    height: 90,
+    width: 150,
+    height: 150,
     backgroundColor: 'rgba(0,0,0,0.2)',
     borderRadius: 100,
   },
@@ -556,7 +588,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   inputTitle: {
-    fontSize: 22,
+    fontSize: 25,
     margin: 10,
     width: '100%',
     paddingLeft: 30,
@@ -571,6 +603,16 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: 'pink',
     alignItems: 'center',
+  },
+  modalBtnText: {
+    fontSize: 19,
+    textAlign: 'center',
+    color: 'rgb(40,113,247)',
+  },
+  modalBtn: {
+    paddingVertical: 9,
+    marginVertical: 1,
+    width: '100%',
   },
 });
 

@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import {AuthContext} from '../context/AuthContext';
 import {UserContext} from '../context/UserContext';
+import UploadButton from '../api/PhotoStorage';
 import ImagePicker from 'react-native-image-crop-picker';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
@@ -51,8 +52,9 @@ const EditProfileScreen = ({route, navigation}) => {
     ImagePicker.openPicker({
       width: 300,
       height: 300,
-      compressImageQuality: 0.7,
+      compressImageQuality: 0.75,
       cropping: true,
+      cropperCircleOverlay: true,
     })
       .then((image) => {
         console.log(image);
@@ -199,6 +201,11 @@ const EditProfileScreen = ({route, navigation}) => {
           onChangeText={(newValue) => setUsername(newValue)}
         />
       </View>
+      {/* <UploadButton
+        onPressUpload={submitForm}
+        image={image}
+        originalImage={originalImage}
+      /> */}
 
       {uploading ? (
         <View>

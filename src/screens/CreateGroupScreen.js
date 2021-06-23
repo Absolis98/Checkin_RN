@@ -552,41 +552,68 @@ const CreateGroupScreen = ({navigation, route}) => {
         </TouchableOpacity>
       )}
 
+      {isAddPhotoModalVisible || isAddPhotoModalVisible ? (
+        <View
+          style={{
+            backgroundColor: 'rgba(0,0,0, .4)',
+            height: '100%',
+            width: '100%',
+            position: 'absolute',
+          }}></View>
+      ) : null}
+
       <Modal
         animationType="slide"
         transparent={true}
         visible={isAddPhotoModalVisible}
-        // onRequestClose={() => {
-        //   // this.closeButtonFunction()
-        // }}
-      >
-        <View
+        onRequestClose={() => {
+          setPhotoModalVisible(false);
+        }}>
+        <Pressable
+          onPress={() => {
+            setPhotoModalVisible(false);
+          }}
           style={{
-            height: '40%',
+            height: '100%',
             marginTop: 'auto',
-            backgroundColor: 'lightblue',
+            justifyContent: 'flex-end',
           }}>
-          <View>
-            <Button
-              title="Cancel"
-              onPress={() => {
-                setPhotoModalVisible(!isAddPhotoModalVisible);
-              }}
-            />
-            <Button
-              title="Take Photo"
-              onPress={() => {
-                takePhotoFromCamera();
-              }}
-            />
-            <Button
-              title="Choose From Library"
-              onPress={() => {
-                choosePhotoFromLibrary();
-              }}
-            />
-          </View>
-        </View>
+          <Pressable
+            onPress={() => null}
+            style={{
+              height: '22%',
+              backgroundColor: 'white',
+              borderTopLeftRadius: 25,
+              borderTopRightRadius: 25,
+            }}>
+            <View>
+              <TouchableOpacity
+                style={styles.photoModalBtn}
+                onPress={() => {
+                  takePhotoFromCamera();
+                }}>
+                <Text style={[styles.modalBtnText, {marginTop: 6}]}>
+                  Take Photo
+                </Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.photoModalBtn}
+                onPress={() => {
+                  choosePhotoFromLibrary();
+                }}>
+                <Text style={styles.modalBtnText}>Choose From Library</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.photoModalBtn}
+                onPress={() => {
+                  setPhotoModalVisible(!isAddPhotoModalVisible);
+                }}>
+                <Text style={styles.modalBtnText}>Cancel</Text>
+              </TouchableOpacity>
+            </View>
+          </Pressable>
+        </Pressable>
       </Modal>
     </ScrollView>
   );
@@ -704,6 +731,11 @@ const styles = StyleSheet.create({
     width: 65,
     height: 65,
     marginLeft: 35,
+  },
+  photoModalBtn: {
+    paddingVertical: 9,
+    marginVertical: 1,
+    width: '100%',
   },
 });
 
