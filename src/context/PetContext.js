@@ -190,8 +190,12 @@ export const PetProvider = ({children}) => {
           .collection('pets')
           .doc(petId)
           .onSnapshot((doc) => {
-            let formattedDoc = formatData(doc.data());
-            setPetData(formattedDoc);
+            if (doc.exists) {
+              let formattedDoc = formatData(doc.data());
+              setPetData(formattedDoc);
+            } else {
+              setPetData(undefined);
+            }
           });
       } catch (error) {
         console.log(error);

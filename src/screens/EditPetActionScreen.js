@@ -1,31 +1,62 @@
 import React, {useContext} from 'react';
-import {StyleSheet, ScrollView} from 'react-native';
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import {PetContext} from '../context/PetContext';
 import PetActionForm from '../components/PetActionForm';
 
 const EditPetActionScreen = ({navigation, route}) => {
   const {action, petId, actionType} = route.params;
-  const {updateAction, deleteAction} = useContext(PetContext);
+  const {pet, updateAction, deleteAction} = useContext(PetContext);
 
   return (
-    <ScrollView
-      contentContainerStyle={{
-        flexGrow: 1,
-        alignItems: 'center',
-      }}>
-      <PetActionForm
-        crudType={'Update'}
-        initialState={action}
-        deleteFunc={() =>
-          deleteAction(petId, actionType, action.name, () => navigation.pop(2))
-        }
-        onSubmit={(updatedAction) =>
-          updateAction(petId, actionType, action.name, updatedAction, () =>
-            navigation.pop(2),
-          )
-        }
-      />
-    </ScrollView>
+    <View style={{flex: 1}}>
+      {pet ? (
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+            alignItems: 'center',
+          }}>
+          <PetActionForm
+            crudType={'Update'}
+            initialState={action}
+            deleteFunc={() =>
+              deleteAction(petId, actionType, action.name, () =>
+                navigation.pop(2),
+              )
+            }
+            onSubmit={(updatedAction) =>
+              updateAction(petId, actionType, action.name, updatedAction, () =>
+                navigation.pop(2),
+              )
+            }
+          />
+        </ScrollView>
+      ) : (
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <Text style={{fontSize: 30}}>Pet was deleted :(</Text>
+          <TouchableOpacity
+            onPress={() => navigation.popToTop()}
+            style={{
+              backgroundColor: 'red',
+              padding: 15,
+              borderRadius: 15,
+              marginTop: 15,
+            }}>
+            <Text style={{color: 'white'}}>Navigate to Home</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </View>
   );
 };
 

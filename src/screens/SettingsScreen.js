@@ -1,12 +1,13 @@
-import React, {useContext, useState, useEffect} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   View,
   Text,
-  Button,
   StyleSheet,
   SafeAreaView,
   Image,
   TouchableOpacity,
+  Pressable,
+  Modal,
 } from 'react-native';
 
 import firestore from '@react-native-firebase/firestore';
@@ -17,104 +18,149 @@ const SettingsScreen = ({navigation}) => {
   const {authUser, logout} = useContext(AuthContext);
   const {user} = useContext(UserContext);
 
+  const [isImageModalVisible, setImageModalVisable] = useState(false);
+
   return (
     <SafeAreaView style={{flex: 1}}>
-      <View style={{flex: 1}}>
-        <Text style={styles.headerText}>Account</Text>
-        <View
+      <Text style={styles.headerText}>Account</Text>
+      <View
+        style={{
+          backgroundColor: 'white',
+          paddingVertical: 20,
+          marginHorizontal: 20,
+          borderRadius: 15,
+          alignItems: 'center',
+          shadowColor: 'rgba(0,0,0, .4)', // IOS
+          shadowOffset: {height: 1, width: 1}, // IOS
+          shadowOpacity: 1, // IOS
+          shadowRadius: 1, //IOS
+          elevation: 2, // Android
+        }}>
+        <Text style={{fontSize: 25}}>{user.username}</Text>
+        <TouchableOpacity
+          onPress={() => setImageModalVisable(true)}
+          style={[styles.button]}>
+          {user.imageURL ? (
+            <Image
+              // style={styles.avatar}
+              style={{width: 120, height: 120, borderRadius: 100}}
+              source={{uri: user.imageURL}}
+            />
+          ) : (
+            <Image
+              // style={styles.avatar}
+              style={{width: 120, height: 120, borderRadius: 100}}
+              source={require('../assets/owner.png')}
+            />
+          )}
+        </TouchableOpacity>
+        <Text style={{fontSize: 17, marginTop: 5}}>
+          Pets: {user.petsList.length}
+        </Text>
+        <Text style={{fontSize: 17, marginTop: 5}}>
+          Groups: {user.groupsList.length}
+        </Text>
+        <Text style={{fontSize: 17, marginTop: 5}}>
+          Co-Owners: {user.ownersList.length}
+        </Text>
+      </View>
+      <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+        <TouchableOpacity
           style={{
-            backgroundColor: 'white',
-            paddingVertical: 20,
-            marginHorizontal: 20,
-            borderRadius: 15,
+            flex: 1,
             alignItems: 'center',
+            justifyContent: 'center',
+            paddingVertical: 12,
+            marginTop: 10,
+            borderRadius: 15,
+            marginLeft: 20,
+            marginRight: 5,
             shadowColor: 'rgba(0,0,0, .4)', // IOS
             shadowOffset: {height: 1, width: 1}, // IOS
             shadowOpacity: 1, // IOS
             shadowRadius: 1, //IOS
             elevation: 2, // Android
+            backgroundColor: 'white',
+          }}
+          onPress={() => {
+            navigation.push('EditProfileScreen', {
+              username: user.username,
+              imageURL: user.imageURL,
+              userId: authUser.uid,
+            });
           }}>
-          <Text style={{fontSize: 25}}>{user.username}</Text>
-          <View style={[styles.button]}>
+          <Text>Edit Profile</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            paddingVertical: 12,
+            marginTop: 10,
+            borderRadius: 15,
+            marginLeft: 5,
+            marginRight: 20,
+            borderWidth: 5,
+            backgroundColor: 'white',
+            borderColor: 'rgb(220,53,69)',
+          }}
+          onPress={() => {
+            logout();
+          }}>
+          <Text
+            style={{
+              color: 'rgb(220,53,69)',
+              fontSize: 20,
+              fontWeight: '500',
+            }}>
+            Logout
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={isImageModalVisible}
+        onRequestClose={() => setImageModalVisable(!isImageModalVisible)}>
+        <Pressable
+          onPress={() => setImageModalVisable(!isImageModalVisible)}
+          style={{
+            height: '100%',
+            marginTop: 'auto',
+            justifyContent: 'center',
+            alignItems: 'center',
+            backgroundColor: 'rgba(0,0,0, .4)',
+          }}>
+          <View
+            style={{
+              backgroundColor: 'black',
+            }}>
             {user.imageURL ? (
               <Image
                 // style={styles.avatar}
-                style={{width: 100, height: 100, borderRadius: 100}}
+                style={{
+                  height: 300,
+                  width: 300,
+                  margin: 5,
+                }}
                 source={{uri: user.imageURL}}
               />
             ) : (
               <Image
-                // style={styles.avatar}
-                style={{width: 100, height: 100, borderRadius: 100}}
+                style={{
+                  height: 300,
+                  width: 300,
+                  margin: 5,
+                  backgroundColor: 'white',
+                }}
                 source={require('../assets/owner.png')}
               />
             )}
           </View>
-          <Text style={{fontSize: 17, marginTop: 5}}>
-            Pets: {user.petsList.length}
-          </Text>
-          <Text style={{fontSize: 17, marginTop: 5}}>
-            Groups: {user.groupsList.length}
-          </Text>
-          <Text style={{fontSize: 17, marginTop: 5}}>
-            Co-Owners: {user.ownersList.length}
-          </Text>
-        </View>
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <TouchableOpacity
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              paddingVertical: 12,
-              marginTop: 10,
-              borderRadius: 15,
-              marginLeft: 20,
-              marginRight: 5,
-              shadowColor: 'rgba(0,0,0, .4)', // IOS
-              shadowOffset: {height: 1, width: 1}, // IOS
-              shadowOpacity: 1, // IOS
-              shadowRadius: 1, //IOS
-              elevation: 2, // Android
-              backgroundColor: 'white',
-            }}
-            onPress={() => {
-              navigation.push('EditProfileScreen', {
-                username: user.username,
-                imageURL: user.imageURL,
-                userId: authUser.uid,
-              });
-            }}>
-            <Text>Edit Profile</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              justifyContent: 'center',
-              paddingVertical: 12,
-              marginTop: 10,
-              borderRadius: 15,
-              marginLeft: 5,
-              marginRight: 20,
-              borderWidth: 5,
-              backgroundColor: 'white',
-              borderColor: 'rgb(220,53,69)',
-            }}
-            onPress={() => {
-              logout();
-            }}>
-            <Text
-              style={{
-                color: 'rgb(220,53,69)',
-                fontSize: 20,
-                fontWeight: '500',
-              }}>
-              Logout
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
+        </Pressable>
+      </Modal>
     </SafeAreaView>
   );
 };
@@ -125,8 +171,8 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0,0,0,0.2)',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 100,
-    height: 100,
+    width: 120,
+    height: 120,
     borderRadius: 100,
   },
   headerText: {

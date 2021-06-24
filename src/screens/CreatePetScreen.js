@@ -19,6 +19,7 @@ import storage from '@react-native-firebase/storage';
 import {AuthContext} from '../context/AuthContext';
 import {UserContext} from '../context/UserContext';
 import RadioButtonGroup from '../components/RadioButtonGroup';
+import AddPhotoModal from '../components/AddPhotoModal';
 
 const petActions = (species) => {
   switch (species) {

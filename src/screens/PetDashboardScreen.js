@@ -305,8 +305,29 @@ const PetDashboardScreen = ({route, navigation}) => {
             </Pressable>
           </Modal>
         </View>
+      ) : !pet && !loading ? (
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <Text style={{fontSize: 30}}>Pet was deleted :(</Text>
+          <TouchableOpacity
+            onPress={() => navigation.popToTop()}
+            style={{
+              backgroundColor: 'red',
+              padding: 15,
+              borderRadius: 15,
+              marginTop: 15,
+            }}>
+            <Text style={{color: 'white'}}>Navigate to Home</Text>
+          </TouchableOpacity>
+        </View>
       ) : (
-        console.log('nothing')
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <Text>Loading...</Text>
+        </View>
       )}
 
       {/* <Button

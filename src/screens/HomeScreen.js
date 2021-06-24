@@ -50,6 +50,73 @@ const HomeScreen = ({navigation}) => {
           Welcome {user.displayName}: {user.uid}
         </Text> */}
 
+            {/* Groups Section */}
+
+            <View style={{flexDirection: 'row'}}>
+              <View style={styles.groupsArea}>
+                <Text style={styles.headerText}>Groups</Text>
+                <FlatList
+                  data={user.groupsList}
+                  showsHorizontalScrollIndicator={false}
+                  horizontal
+                  keyExtractor={(button) => button.groupId}
+                  renderItem={({item}) => {
+                    return (
+                      <View>
+                        <TouchableOpacity
+                          style={[styles.CircleList]}
+                          onPress={() =>
+                            navigation.push('GroupsOverviewScreen', {
+                              groupId: item.groupId,
+                              // user's co-owners and pets list
+                              // only purpose is to be used in update group screen
+                              // owners: owners,
+                              // pets: pets,
+                            })
+                          }>
+                          <View style={[styles.button, {borderRadius: 30}]}>
+                            {item.imageURL ? (
+                              <Image
+                                // style={styles.avatar}
+                                style={{
+                                  width: 100,
+                                  height: 100,
+                                  borderRadius: 30,
+                                }}
+                                source={{uri: item.imageURL}}
+                              />
+                            ) : (
+                              <Image
+                                // style={styles.avatar}
+                                style={{
+                                  width: 100,
+                                  height: 100,
+                                  borderRadius: 30,
+                                }}
+                                source={require('../assets/group.png')}
+                              />
+                            )}
+                          </View>
+                          <Text style={styles.buttonText}>{item.name}</Text>
+                        </TouchableOpacity>
+                      </View>
+                    );
+                  }}
+                />
+              </View>
+              <TouchableOpacity
+                style={styles.toNextScreenBtn}
+                onPress={() => {
+                  navigation.push('GroupsScreen');
+                  // if (!push) navigation.push('PetDashboardScreen', {pet});
+                  // else navigation.push(push);
+                }}>
+                <View>
+                  <Text>{'>'}</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+
             {/* Pets Section */}
             <View style={{flexDirection: 'row'}}>
               <View style={styles.petsArea}>
@@ -109,73 +176,6 @@ const HomeScreen = ({navigation}) => {
                 style={styles.toNextScreenBtn}
                 onPress={() => {
                   navigation.push('PetsScreen');
-                  // if (!push) navigation.push('PetDashboardScreen', {pet});
-                  // else navigation.push(push);
-                }}>
-                <View>
-                  <Text>{'>'}</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-
-            {/* Groups Section */}
-
-            <View style={{flexDirection: 'row'}}>
-              <View style={styles.groupsArea}>
-                <Text style={styles.headerText}>Groups</Text>
-                <FlatList
-                  data={user.groupsList}
-                  showsHorizontalScrollIndicator={false}
-                  horizontal
-                  keyExtractor={(button) => button.groupId}
-                  renderItem={({item}) => {
-                    return (
-                      <View>
-                        <TouchableOpacity
-                          style={[styles.CircleList]}
-                          onPress={() =>
-                            navigation.push('GroupsOverviewScreen', {
-                              groupId: item.groupId,
-                              // user's co-owners and pets list
-                              // only purpose is to be used in update group screen
-                              // owners: owners,
-                              // pets: pets,
-                            })
-                          }>
-                          <View style={[styles.button, {borderRadius: 30}]}>
-                            {item.imageURL ? (
-                              <Image
-                                // style={styles.avatar}
-                                style={{
-                                  width: 100,
-                                  height: 100,
-                                  borderRadius: 30,
-                                }}
-                                source={{uri: item.imageURL}}
-                              />
-                            ) : (
-                              <Image
-                                // style={styles.avatar}
-                                style={{
-                                  width: 100,
-                                  height: 100,
-                                  borderRadius: 30,
-                                }}
-                                source={require('../assets/group.png')}
-                              />
-                            )}
-                          </View>
-                          <Text style={styles.buttonText}>{item.name}</Text>
-                        </TouchableOpacity>
-                      </View>
-                    );
-                  }}
-                />
-              </View>
-              <TouchableOpacity
-                style={styles.toNextScreenBtn}
-                onPress={() => {
-                  navigation.push('GroupsScreen');
                   // if (!push) navigation.push('PetDashboardScreen', {pet});
                   // else navigation.push(push);
                 }}>

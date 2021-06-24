@@ -1,25 +1,54 @@
 import React, {useContext} from 'react';
-import {StyleSheet, ScrollView} from 'react-native';
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
 import {PetContext} from '../context/PetContext';
 import PetActionForm from '../components/PetActionForm';
 
 const CreatePetActionScreen = ({navigation, route}) => {
   const {petId, actionType} = route.params;
-  const {createAction} = useContext(PetContext);
+  const {pet, createAction} = useContext(PetContext);
 
   return (
-    <ScrollView
-      contentContainerStyle={{
-        flexGrow: 1,
-        alignItems: 'center',
-      }}>
-      <PetActionForm
-        crudType={'Create'}
-        onSubmit={(newAction) =>
-          createAction(petId, actionType, newAction, () => navigation.pop())
-        }
-      />
-    </ScrollView>
+    <View style={{flex: 1}}>
+      {pet ? (
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+            alignItems: 'center',
+          }}>
+          <PetActionForm
+            crudType={'Create'}
+            onSubmit={(newAction) =>
+              createAction(petId, actionType, newAction, () => navigation.pop())
+            }
+          />
+        </ScrollView>
+      ) : (
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <Text style={{fontSize: 30}}>Pet was deleted :(</Text>
+          <TouchableOpacity
+            onPress={() => navigation.popToTop()}
+            style={{
+              backgroundColor: 'red',
+              padding: 15,
+              borderRadius: 15,
+              marginTop: 15,
+            }}>
+            <Text style={{color: 'white'}}>Navigate to Home</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </View>
   );
 };
 

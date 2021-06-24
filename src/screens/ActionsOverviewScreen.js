@@ -103,7 +103,24 @@ const ActionsOverviewScreen = ({navigation, route}) => {
         </View> */}
         </View>
       ) : (
-        console.log('nothing')
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <Text style={{fontSize: 30}}>Pet was deleted :(</Text>
+          <TouchableOpacity
+            onPress={() => navigation.popToTop()}
+            style={{
+              backgroundColor: 'red',
+              padding: 15,
+              borderRadius: 15,
+              marginTop: 15,
+            }}>
+            <Text style={{color: 'white'}}>Navigate to Home</Text>
+          </TouchableOpacity>
+        </View>
       )}
     </View>
   );
