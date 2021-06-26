@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   Pressable,
+  ActivityIndicator,
 } from 'react-native';
 import {AuthContext} from '../context/AuthContext';
 import {UserContext} from '../context/UserContext';
@@ -24,11 +25,8 @@ import {GroupContext} from '../context/GroupContext';
 // View of who did what last. Calandar view?
 
 const GroupsOverviewScreen = ({navigation, route}) => {
-  const {authUser} = useContext(AuthContext);
   const {user} = useContext(UserContext);
   const {group, pullGroupData} = useContext(GroupContext);
-  console.log('THIS RIGHT HERE' + group);
-  // const {groupId, pets, owners} = route.params;
   const {groupId} = route.params;
   const [loading, setLoading] = useState(true);
   const [isImageModalVisible, setImageModalVisable] = useState(false);
@@ -45,9 +43,46 @@ const GroupsOverviewScreen = ({navigation, route}) => {
     return unsubscribe;
   }, []);
 
+  const isInGroup = () => {
+    let inGroup = false;
+    if (!loading && group !== undefined) {
+      for (let owner of group.ownersList) {
+        if (owner.ownerId === user.uid) inGroup = true;
+      }
+      return inGroup;
+    } else {
+      return null;
+    }
+  };
+
+  let inGroup = isInGroup();
+
+  if (inGroup === false) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Text style={{fontSize: 22}}>You were removed from Group :(</Text>
+        <TouchableOpacity
+          onPress={() => navigation.popToTop()}
+          style={{
+            backgroundColor: 'red',
+            padding: 15,
+            borderRadius: 15,
+            marginTop: 15,
+          }}>
+          <Text style={{color: 'white'}}>Navigate to Home</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      {!loading && group !== undefined ? (
+      {!loading && group && inGroup && group.groupId === groupId ? (
         <View style={styles.container}>
           <View style={styles.body}>
             <TouchableOpacity
@@ -245,7 +280,13 @@ const GroupsOverviewScreen = ({navigation, route}) => {
           </Modal>
         </View>
       ) : (
-        console.log('nothing')
+        (console.log('loading'),
+        (
+          <View
+            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        ))
       )}
     </View>
   );
