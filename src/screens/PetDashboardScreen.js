@@ -8,6 +8,7 @@ import {
   Pressable,
   Modal,
   FlatList,
+  ActivityIndicator,
 } from 'react-native';
 import ActionsButtonList from '../components/ActionsButtonList';
 import {PetContext} from '../context/PetContext';
@@ -58,6 +59,7 @@ const PetDashboardScreen = ({route, navigation}) => {
   const [loading, setLoading] = useState(true);
   const [hidden, setHidden] = useState(true);
   const [isImageModalVisible, setImageModalVisable] = useState(false);
+  console.log('is loading: ' + loading);
 
   let recordsList = [];
   if (pet !== undefined)
@@ -72,6 +74,7 @@ const PetDashboardScreen = ({route, navigation}) => {
 
   console.log(recordsList);
 
+  console.log('is loading: ' + loading);
   useEffect(() => {
     const unsubscribe = pullPetData(petId);
     if (loading) {
@@ -81,9 +84,19 @@ const PetDashboardScreen = ({route, navigation}) => {
     return unsubscribe;
   }, []);
 
+  console.log('is loading: ' + loading);
+  if (loading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
+
+  console.log('is loading: ' + loading);
   return (
     <View style={styles.container}>
-      {!loading && pet !== undefined && pet.petId === petId ? (
+      {!loading && pet && pet.petId === petId ? (
         <View style={styles.container}>
           <View style={styles.body}>
             <FlatList
@@ -305,7 +318,7 @@ const PetDashboardScreen = ({route, navigation}) => {
             </Pressable>
           </Modal>
         </View>
-      ) : !pet && !loading ? (
+      ) : pet === null ? (
         <View
           style={{
             flex: 1,
@@ -326,7 +339,7 @@ const PetDashboardScreen = ({route, navigation}) => {
         </View>
       ) : (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text>Loading...</Text>
+          <ActivityIndicator size="large" color="#0000ff" />
         </View>
       )}
 

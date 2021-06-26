@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   Image,
   Pressable,
+  ActivityIndicator,
 } from 'react-native';
 import {UserContext} from '../context/UserContext';
 import {AuthContext} from '../context/AuthContext';
@@ -419,7 +420,7 @@ const HomeScreen = ({navigation}) => {
                       }}
                       onPress={() => {
                         setAddModalVisible(!isAddModalVisible);
-                        addCoOwner(authUser, email);
+                        addCoOwner(email);
                       }}>
                       <Text style={styles.modalBtnText}>Add</Text>
                     </TouchableOpacity>
@@ -461,8 +462,8 @@ const HomeScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
       ) : (
-        <View>
-          <Text>Loading...</Text>
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ActivityIndicator size="large" color="#0000ff" />
         </View>
       )}
     </SafeAreaView>

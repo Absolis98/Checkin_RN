@@ -1,6 +1,12 @@
 import React, {useContext} from 'react';
-import {View, Text, StyleSheet, FlatList, ImageBackground} from 'react-native';
-import {TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  ImageBackground,
+  TouchableOpacity,
+} from 'react-native';
 
 import {AuthContext} from '../context/AuthContext';
 import {UserContext} from '../context/UserContext';
@@ -108,22 +114,24 @@ const PetsScreen = ({navigation}) => {
 
       <TouchableOpacity
         style={{
+          position: 'absolute',
+          bottom: 20,
+          width: '70%',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: 'pink',
           paddingVertical: 12,
-          marginBottom: 10,
-          borderRadius: 20,
-          marginHorizontal: 40,
-          borderWidth: 1,
-          borderColor: 'rgba(0,0,0,0.2)',
+          borderRadius: 15,
+          shadowColor: 'rgba(0,0,0, .4)', // IOS
+          shadowOffset: {height: 1, width: 1}, // IOS
+          shadowOpacity: 1, // IOS
+          shadowRadius: 1, //IOS
+          elevation: 2, // Android
+          backgroundColor: 'pink',
         }}
         onPress={() => {
           navigation.push('CreatePetScreen');
         }}>
-        <View>
-          <Text>Create New Pet</Text>
-        </View>
+        <Text>Create New Pet</Text>
       </TouchableOpacity>
     </View>
   );
@@ -132,6 +140,7 @@ const PetsScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
   },
   title: {
     fontSize: 25,

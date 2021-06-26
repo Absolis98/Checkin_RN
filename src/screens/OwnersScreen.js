@@ -8,12 +8,13 @@ import {
   Modal,
   TextInput,
   Button,
-  ImageBackground,
+  Image,
   Pressable,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {AuthContext} from '../context/AuthContext';
 import {UserContext} from '../context/UserContext';
+import Icon from 'react-native-vector-icons/EvilIcons';
 
 const OwnersScreen = () => {
   const {authUser} = useContext(AuthContext);
@@ -37,48 +38,51 @@ const OwnersScreen = () => {
   ];
   return (
     <View style={styles.container}>
-      <FlatList
-        data={user.ownersList}
-        bounces
-        keyExtractor={(owner) => owner.ownerId}
-        renderItem={({item}) => {
-          return (
-            <View style={{borderBottomWidth: 1}}>
-              <TouchableOpacity
-                onLongPress={() => {
-                  setVisible2(true);
-                  setSelectedOwner(item);
-                }}
-                style={styles.nameContainer}>
-                {item.imageURL !== undefined ? (
-                  <ImageBackground
+      <View style={{flex: 1, width: '100%'}}>
+        <FlatList
+          data={user.ownersList}
+          bounces
+          keyExtractor={(owner) => owner.ownerId}
+          renderItem={({item}) => {
+            return (
+              <View style={styles.nameContainer}>
+                {item.imageURL ? (
+                  <Image
                     // style={styles.avatar}
-                    style={{width: 60, height: 60}}
-                    imageStyle={{
-                      borderRadius: 100,
-                      borderWidth: 1,
-                      borderColor: 'rgba(0,0,0,0.2)',
-                      marginLeft: 10,
-                    }}
-                    source={{uri: item.imageURL}}></ImageBackground>
+                    style={styles.avatar}
+                    source={{uri: item.imageURL}}
+                  />
                 ) : (
-                  <ImageBackground
+                  <Image
                     // style={styles.avatar}
-                    style={{width: 60, height: 60}}
-                    imageStyle={{
-                      borderRadius: 100,
-                      borderWidth: 1,
-                      borderColor: 'rgba(0,0,0,0.2)',
-                      marginLeft: 10,
-                    }}
-                    source={require('../assets/owner.png')}></ImageBackground>
+                    style={styles.avatar}
+                    source={require('../assets/owner.png')}
+                  />
                 )}
                 <Text style={styles.nameStyle}>{item.username}</Text>
-              </TouchableOpacity>
-            </View>
-          );
-        }}
-      />
+
+                <TouchableOpacity
+                  style={{
+                    margin: 9,
+                    position: 'absolute',
+                    right: 10,
+                  }}
+                  onPress={() => {
+                    setVisible2(true);
+                    setSelectedOwner(item);
+                  }}>
+                  <Icon
+                    name={'trash'}
+                    size={40}
+                    color={'rgb(220,53,69)'}
+                    // iconStyle={{}}
+                  />
+                </TouchableOpacity>
+              </View>
+            );
+          }}
+        />
+      </View>
 
       {isAddModalVisible ? (
         <View
@@ -152,7 +156,7 @@ const OwnersScreen = () => {
                 }}
                 onPress={() => {
                   setVisible(!isAddModalVisible);
-                  addCoOwner(authUser, email);
+                  addCoOwner(email);
                 }}>
                 <Text style={styles.modalBtnText}>Add</Text>
               </TouchableOpacity>
@@ -196,22 +200,24 @@ const OwnersScreen = () => {
 
       <TouchableOpacity
         style={{
+          position: 'absolute',
+          bottom: 20,
+          width: '70%',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: 'pink',
           paddingVertical: 12,
-          marginBottom: 10,
-          borderRadius: 20,
-          marginHorizontal: 40,
-          borderWidth: 1,
-          borderColor: 'rgba(0,0,0,0.2)',
+          borderRadius: 15,
+          shadowColor: 'rgba(0,0,0, .4)', // IOS
+          shadowOffset: {height: 1, width: 1}, // IOS
+          shadowOpacity: 1, // IOS
+          shadowRadius: 1, //IOS
+          elevation: 2, // Android
+          backgroundColor: 'pink',
         }}
         onPress={() => {
           setVisible(!isAddModalVisible);
         }}>
-        <View>
-          <Text>Add Co-Owner</Text>
-        </View>
+        <Text>Add Co-Owner</Text>
       </TouchableOpacity>
     </View>
   );
@@ -220,15 +226,25 @@ const OwnersScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
   },
   nameContainer: {
+    alignItems: 'center',
+    borderBottomWidth: 1,
     flexDirection: 'row',
     paddingVertical: 8,
   },
+  avatar: {
+    width: 75,
+    height: 75,
+    borderRadius: 100,
+    borderWidth: 1,
+    borderColor: 'rgba(0,0,0,0.2)',
+    marginLeft: 20,
+  },
   nameStyle: {
-    marginStart: 20,
-    fontSize: 20,
-    marginTop: 15,
+    marginStart: 25,
+    fontSize: 23,
   },
   inputContainer: {
     width: '100%',

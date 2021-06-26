@@ -3,7 +3,6 @@ import {
   View,
   Text,
   StyleSheet,
-  Button,
   Image,
   FlatList,
   TouchableOpacity,
@@ -20,10 +19,7 @@ import firestore from '@react-native-firebase/firestore';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
 
-import {AuthContext} from '../context/AuthContext';
 import {UserContext} from '../context/UserContext';
-
-import checkinDB from '../api/fakeDB';
 
 // let groupsList = [];
 // Object.keys(checkinDB.pets).forEach((key) => {
@@ -38,7 +34,6 @@ import checkinDB from '../api/fakeDB';
 // });
 
 const CreateGroupScreen = ({navigation, route}) => {
-  const {authUser} = useContext(AuthContext);
   const {user} = useContext(UserContext);
   // consider pulling pets and owners in the previous screen
   // pass as params (saves one read)
@@ -146,8 +141,8 @@ const CreateGroupScreen = ({navigation, route}) => {
       for (let i = 0; i < addingOwnersList.length; i++) {
         ownersList[addingOwnersList[i].ownerId] = addingOwnersList[i];
       }
-      ownersList[authUser.uid] = {
-        ownerId: authUser.uid,
+      ownersList[user.uid] = {
+        ownerId: user.uid,
         username: user.username,
       };
       for (let i = 0; i < addingPetsList.length; i++) {
@@ -188,7 +183,7 @@ const CreateGroupScreen = ({navigation, route}) => {
 
         batch.update(tmpUserRef, chunkToUpdate);
       });
-      let tmpUserRef = firestore().collection('users').doc(authUser.uid);
+      let tmpUserRef = firestore().collection('users').doc(user.uid);
       // let groupBreadcrumbs = `groupsList.${groupId}`;
       // let petBreadcrumbs = `petsList`;
       batch.update(tmpUserRef, chunkToUpdate);
@@ -260,12 +255,13 @@ const CreateGroupScreen = ({navigation, route}) => {
               marginHorizontal: 10,
             }}>
             <Text style={styles.headerText}>Pets</Text>
-            <Pressable
+            <TouchableOpacity
+              style={{paddingHorizontal: 10}}
               onPress={() => {
                 setPetModalVisible(!isPetModalVisible);
               }}>
               <Text style={{fontSize: 28, color: 'deepskyblue'}}>+</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
 
           <FlatList
@@ -321,12 +317,13 @@ const CreateGroupScreen = ({navigation, route}) => {
               marginHorizontal: 10,
             }}>
             <Text style={styles.headerText}>Co-Owners</Text>
-            <Pressable
+            <TouchableOpacity
+              style={{paddingHorizontal: 10}}
               onPress={() => {
                 setOwnerModalVisible(!isOwnerModalVisible);
               }}>
               <Text style={{fontSize: 28, color: 'deepskyblue'}}>+</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
           <FlatList
             data={addingOwnersList}

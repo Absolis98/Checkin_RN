@@ -20,7 +20,7 @@ import firestore from '@react-native-firebase/firestore';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
 
-import {AuthContext} from '../context/AuthContext';
+import {UserContext} from '../context/UserContext';
 
 // let groupsList = [];
 // Object.keys(checkinDB.pets).forEach((key) => {
@@ -35,7 +35,7 @@ import {AuthContext} from '../context/AuthContext';
 // });
 
 const UpdateGroupScreen = ({navigation, route}) => {
-  const {authUser} = useContext(AuthContext);
+  const {user} = useContext(UserContext);
   // consider pulling pets and owners in the previous screen
   // pass as params (saves one read)
   // const [pets, setPets] = useState({petsList: ''});
@@ -224,7 +224,7 @@ const UpdateGroupScreen = ({navigation, route}) => {
         imageURL: imageURL,
       };
       for (let i = 0; i < addingOwnersList.length; i++) {
-        if (addingOwnersList[i].ownerId !== authUser.uid) {
+        if (addingOwnersList[i].ownerId !== user.uid) {
           console.log('pass');
           let tmpUserRef = firestore()
             .collection('users')
@@ -291,6 +291,39 @@ const UpdateGroupScreen = ({navigation, route}) => {
     }
   };
 
+  const isInGroup = () => {
+    let inGroup = false;
+    for (let userGroup of user.groupsList) {
+      if (userGroup.groupId === group.groupId) inGroup = true;
+    }
+    return inGroup;
+  };
+
+  let inGroup = isInGroup();
+
+  if (inGroup === false) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Text style={{fontSize: 22}}>You were removed from Group :(</Text>
+        <TouchableOpacity
+          onPress={() => navigation.popToTop()}
+          style={{
+            backgroundColor: 'red',
+            padding: 15,
+            borderRadius: 15,
+            marginTop: 15,
+          }}>
+          <Text style={{color: 'white'}}>Navigate to Home</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={{flex: 1}}>
@@ -327,12 +360,13 @@ const UpdateGroupScreen = ({navigation, route}) => {
               marginHorizontal: 10,
             }}>
             <Text style={styles.headerText}>Pets</Text>
-            <Pressable
+            <TouchableOpacity
+              style={{paddingHorizontal: 10}}
               onPress={() => {
                 setPetModalVisible(!isPetModalVisible);
               }}>
               <Text style={{fontSize: 28, color: 'deepskyblue'}}>+</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
 
           <FlatList
@@ -385,12 +419,13 @@ const UpdateGroupScreen = ({navigation, route}) => {
               marginHorizontal: 10,
             }}>
             <Text style={styles.headerText}>Co-Owners</Text>
-            <Pressable
+            <TouchableOpacity
+              style={{paddingHorizontal: 10}}
               onPress={() => {
                 setOwnerModalVisible(!isOwnerModalVisible);
               }}>
               <Text style={{fontSize: 28, color: 'deepskyblue'}}>+</Text>
-            </Pressable>
+            </TouchableOpacity>
           </View>
           <FlatList
             data={addingOwnersList}

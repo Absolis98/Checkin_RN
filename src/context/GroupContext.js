@@ -18,7 +18,7 @@ function reformatData(doc) {
 export const GroupContext = createContext(undefined);
 
 export const GroupProvider = ({children}) => {
-  const [group, setGroupData] = useState();
+  const [group, setGroupData] = useState(undefined);
 
   const groupFunctions = {
     pullGroupData: (groupId) => {

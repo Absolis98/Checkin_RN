@@ -27,6 +27,7 @@ function reformatDataCluster(doc) {
     doc.ownersList = oList;
     // pets.forEach((pet) => list.push(pet));
   }
+
   return doc;
 }
 export const UserContext = createContext();
@@ -41,7 +42,11 @@ export const UserProvider = ({children}) => {
           .collection('users')
           .doc(userId)
           .onSnapshot((doc) => {
-            setUserData(reformatDataCluster(doc.data()));
+            const data = reformatDataCluster(doc.data());
+            data['uid'] = doc.id;
+            console.log(data.uid);
+            console.log('doc uid');
+            setUserData(data);
           });
       } catch (e) {
         console.log(e);
@@ -57,7 +62,7 @@ export const UserProvider = ({children}) => {
         console.log(e);
       }
     },
-    addCoOwner: async (user, coOnwerEmail) => {
+    addCoOwner: async (coOnwerEmail) => {
       try {
         if (user.email !== coOnwerEmail) {
           const batch = firestore().batch();
@@ -84,6 +89,7 @@ export const UserProvider = ({children}) => {
             [userBreadcrumbs]: {
               username: newCoOwnerData[0].username,
               ownerId: newCoOwnerRef[0].id,
+              imageURL: newCoOwnerData[0].imageURL,
             },
           });
 
@@ -91,8 +97,9 @@ export const UserProvider = ({children}) => {
           const coOwnerBreadcrumbs = `ownersList.${userRef.id}`;
           batch.update(newCoOwnerRef[0], {
             [coOwnerBreadcrumbs]: {
-              username: user.displayName,
+              username: user.username,
               ownerId: user.uid,
+              imageURL: user.imageURL,
             },
           });
 

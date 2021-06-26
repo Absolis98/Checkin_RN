@@ -194,7 +194,7 @@ export const PetProvider = ({children}) => {
               let formattedDoc = formatData(doc.data());
               setPetData(formattedDoc);
             } else {
-              setPetData(undefined);
+              setPetData(null);
             }
           });
       } catch (error) {
