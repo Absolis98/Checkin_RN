@@ -73,7 +73,7 @@ const GroupsScreen = ({navigation}) => {
                       borderColor: 'rgba(0,0,0,0.2)',
                       // backgroundColor: 'pink',
                     }}>
-                    {item.imageURL !== undefined ? (
+                    {item.imageURL ? (
                       <ImageBackground
                         // style={styles.avatar}
                         style={{width: 125, height: 125}}

@@ -341,7 +341,7 @@ const CreateGroupScreen = ({navigation, route}) => {
                     // }
                   >
                     <View style={styles.button}>
-                      {item.imageURL !== undefined ? (
+                      {item.imageURL ? (
                         <ImageBackground
                           // style={styles.avatar}
                           style={{width: 90, height: 90}}
@@ -484,7 +484,7 @@ const CreateGroupScreen = ({navigation, route}) => {
                       }}
                       style={styles.nameContainer}>
                       <View style={{flexDirection: 'row'}}>
-                        {item.imageURL !== undefined ? (
+                        {item.imageURL ? (
                           <ImageBackground
                             // style={styles.avatar}
                             style={styles.image}

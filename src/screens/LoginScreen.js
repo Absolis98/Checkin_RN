@@ -27,6 +27,7 @@ const SignUpScreen = ({navigation}) => {
         style={styles.input}
         placeholder="Email"
         keyboardType="email-address"
+        textContentType="emailAddress"
         autoCapitalize="none"
         autoCorrect={false}
         value={email}
@@ -37,6 +38,7 @@ const SignUpScreen = ({navigation}) => {
         style={styles.input}
         secureTextEntry={true}
         placeholder="Password"
+        textContentType="password"
         autoCapitalize="none"
         autoCorrect={false}
         value={password}

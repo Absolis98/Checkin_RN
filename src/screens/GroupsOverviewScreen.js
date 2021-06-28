@@ -80,6 +80,29 @@ const GroupsOverviewScreen = ({navigation, route}) => {
     );
   }
 
+  if (!group) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Text style={{fontSize: 22}}>Group was deleted :(</Text>
+        <TouchableOpacity
+          onPress={() => navigation.popToTop()}
+          style={{
+            backgroundColor: 'red',
+            padding: 15,
+            borderRadius: 15,
+            marginTop: 15,
+          }}>
+          <Text style={{color: 'white'}}>Navigate to Home</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       {!loading && group && inGroup && group.groupId === groupId ? (

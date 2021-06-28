@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TextInput,
   Image,
+  ScrollView,
 } from 'react-native';
 // import {FirebaseContext} from '../context/FirebaseContext';
 import {AuthContext} from '../context/AuthContext';
@@ -20,7 +21,7 @@ const SignUpScreen = ({navigation}) => {
   const {register} = useContext(AuthContext);
 
   return (
-    <View style={{alignItems: 'center'}}>
+    <ScrollView contentContainerStyle={{alignItems: 'center'}}>
       <Image
         style={styles.image}
         imageStyle={{}}
@@ -30,6 +31,7 @@ const SignUpScreen = ({navigation}) => {
       <TextInput
         style={styles.input}
         placeholder="Username"
+        textContentType="username"
         autoCorrect={false}
         value={username}
         onChangeText={(newValue) => setUsername(newValue)}
@@ -39,6 +41,7 @@ const SignUpScreen = ({navigation}) => {
         style={styles.input}
         placeholder="Email"
         keyboardType="email-address"
+        textContentType="emailAddress"
         autoCapitalize="none"
         autoCorrect={false}
         value={email}
@@ -49,21 +52,36 @@ const SignUpScreen = ({navigation}) => {
         style={styles.input}
         secureTextEntry={true}
         placeholder="Password"
+        textContentType="newPassword"
         autoCapitalize="none"
         autoCorrect={false}
         value={password}
         onChangeText={(newValue) => setPassword(newValue)}
       />
+      <Text style={styles.inputTitle}>Confirm Password</Text>
+      <TextInput
+        style={styles.input}
+        secureTextEntry={true}
+        placeholder="Password"
+        textContentType="newPassword"
+        autoCapitalize="none"
+        autoCorrect={false}
+        value={confirmPassword}
+        onChangeText={(newValue) => setConfirmPassword(newValue)}
+      />
 
       <TouchableOpacity
         style={styles.btn}
-        onPress={() => register(username, email, password)}>
+        onPress={() => {
+          if (password === confirmPassword) register(username, email, password);
+          else alert('Passwords do not match.');
+        }}>
         <Text style={styles.btnText}>Sign Up</Text>
       </TouchableOpacity>
       {/* <TouchableOpacity >
         <View></View>
       </TouchableOpacity> */}
-    </View>
+    </ScrollView>
   );
 };
 
