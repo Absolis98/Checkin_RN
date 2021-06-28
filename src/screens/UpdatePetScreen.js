@@ -335,7 +335,7 @@ const UpdatePetScreen = ({navigation, route}) => {
               deletePet(authUser, pet);
               navigation.popToTop();
             }}>
-            <Text style={{color: 'white'}}>Delete</Text>
+            <Text style={{color: 'white'}}>Delete Pet</Text>
           </TouchableOpacity>
 
           {isAddPhotoModalVisible || isAddPhotoModalVisible ? (

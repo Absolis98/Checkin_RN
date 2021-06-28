@@ -27,7 +27,11 @@ export const GroupProvider = ({children}) => {
           .collection('groups')
           .doc(groupId)
           .onSnapshot((doc) => {
-            setGroupData(reformatData(doc.data()));
+            if (doc.exists) {
+              setGroupData(reformatData(doc.data()));
+            } else {
+              setGroupData(null);
+            }
           });
       } catch (error) {
         console.log(error);

@@ -375,7 +375,8 @@ const HomeScreen = ({navigation}) => {
                   marginTop: 'auto',
                   justifyContent: 'center',
                 }}>
-                <View
+                <Pressable
+                  onPress={() => null}
                   style={{
                     height: 210,
                     marginHorizontal: '7%',
@@ -425,7 +426,7 @@ const HomeScreen = ({navigation}) => {
                       <Text style={styles.modalBtnText}>Add</Text>
                     </TouchableOpacity>
                   </View>
-                </View>
+                </Pressable>
               </Pressable>
             </Modal>
           </ScrollView>

@@ -20,8 +20,8 @@ const OwnersScreen = () => {
   const {authUser} = useContext(AuthContext);
   const {user, addCoOwner, deleteCoOwner} = useContext(UserContext);
 
-  const [isAddModalVisible, setVisible] = useState(false);
-  const [isDeleteModalVisible, setVisible2] = useState(false);
+  const [isAddModalVisible, setAddModalVisible] = useState(false);
+  const [isDeleteModalVisible, setDeleteModalVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [selectedOwner, setSelectedOwner] = useState('');
 
@@ -68,7 +68,7 @@ const OwnersScreen = () => {
                     right: 10,
                   }}
                   onPress={() => {
-                    setVisible2(true);
+                    setDeleteModalVisible(true);
                     setSelectedOwner(item);
                   }}>
                   <Icon
@@ -84,40 +84,33 @@ const OwnersScreen = () => {
         />
       </View>
 
-      {isAddModalVisible ? (
-        <View
-          style={{
-            backgroundColor: 'rgba(0,0,0, .4)',
-            height: '100%',
-            width: '100%',
-            position: 'absolute',
-          }}></View>
-      ) : null}
-
       {/* Add Owner Modal */}
       <Modal
-        animationType="slide"
+        animationType="fade"
         transparent={true}
         visible={isAddModalVisible}
+        onRequestClose={() => setAddModalVisible(false)}
         // onRequestClose={() => {
         //   // this.closeButtonFunction()
         // }}
       >
         <Pressable
-          onPress={() => setVisible(false)}
+          onPress={() => {
+            setAddModalVisible(false);
+          }}
           style={{
             height: '100%',
             marginTop: 'auto',
-            justifyContent: 'flex-end',
+            justifyContent: 'center',
           }}>
           <Pressable
+            onPress={() => null}
             style={{
-              height: '25%',
+              height: 210,
+              marginHorizontal: '7%',
               backgroundColor: '#DEDEDE',
-              borderTopLeftRadius: 25,
-              borderTopRightRadius: 25,
-            }}
-            onPress={() => null}>
+              borderRadius: 25,
+            }}>
             <View style={[styles.inputContainer, {marginVertical: 20}]}>
               <Text style={styles.inputTitle}>Co-Owner's Email:</Text>
               <TextInput
@@ -143,7 +136,7 @@ const OwnersScreen = () => {
                   paddingVertical: 10,
                 }}
                 onPress={() => {
-                  setVisible(!isAddModalVisible);
+                  setAddModalVisible(!isAddModalVisible);
                 }}>
                 <Text style={styles.modalBtnText}>Close</Text>
               </TouchableOpacity>
@@ -155,7 +148,7 @@ const OwnersScreen = () => {
                   paddingVertical: 10,
                 }}
                 onPress={() => {
-                  setVisible(!isAddModalVisible);
+                  setAddModalVisible(!isAddModalVisible);
                   addCoOwner(email);
                 }}>
                 <Text style={styles.modalBtnText}>Add</Text>
@@ -174,28 +167,53 @@ const OwnersScreen = () => {
         //   // this.closeButtonFunction()
         // }}
       >
-        <View
+        <Pressable
+          onPress={() => setDeleteModalVisible(false)}
           style={{
-            height: '25%',
+            height: '100%',
             marginTop: 'auto',
-            backgroundColor: 'lightblue',
+            justifyContent: 'center',
           }}>
-          <View>
-            <Button
-              title="Cancel"
-              onPress={() => {
-                setVisible2(!isDeleteModalVisible);
-              }}
-            />
-            <Button
-              title="Delete"
-              onPress={() => {
-                setVisible2(!isDeleteModalVisible);
-                deleteCoOwner(authUser.uid, selectedOwner.ownerId);
-              }}
-            />
-          </View>
-        </View>
+          <Pressable
+            style={{
+              height: 210,
+              marginHorizontal: '7%',
+              backgroundColor: '#DEDEDE',
+              borderRadius: 25,
+              justifyContent: 'flex-end',
+              alignItems: 'center',
+            }}
+            onPress={() => null}>
+            <Text
+              style={{
+                position: 'absolute',
+                top: 45,
+                fontSize: 20,
+                textAlign: 'center',
+              }}>
+              Are you sure you want to remove {selectedOwner.username}?
+            </Text>
+            <View style={{flexDirection: 'row'}}>
+              <TouchableOpacity
+                style={styles.modalBtn}
+                onPress={() => {
+                  setDeleteModalVisible(!isDeleteModalVisible);
+                }}>
+                <Text style={styles.modalBtnText}>Cancel</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.modalBtn}
+                onPress={() => {
+                  setDeleteModalVisible(!isDeleteModalVisible);
+                  deleteCoOwner(authUser.uid, selectedOwner.ownerId);
+                }}>
+                <Text style={[styles.modalBtnText, {color: 'rgb(220,53,69)'}]}>
+                  Delete
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </Pressable>
+        </Pressable>
       </Modal>
 
       <TouchableOpacity
@@ -215,10 +233,20 @@ const OwnersScreen = () => {
           backgroundColor: 'pink',
         }}
         onPress={() => {
-          setVisible(!isAddModalVisible);
+          setAddModalVisible(!isAddModalVisible);
         }}>
         <Text>Add Co-Owner</Text>
       </TouchableOpacity>
+
+      {isAddModalVisible || isDeleteModalVisible ? (
+        <View
+          style={{
+            backgroundColor: 'rgba(0,0,0, .4)',
+            height: '100%',
+            width: '100%',
+            position: 'absolute',
+          }}></View>
+      ) : null}
     </View>
   );
 };
@@ -265,6 +293,15 @@ const styles = StyleSheet.create({
     fontSize: 22,
     margin: 10,
     marginRight: '45%',
+  },
+  modalBtn: {
+    marginHorizontal: 1,
+    width: '50%',
+    paddingVertical: 10,
+    paddingVertical: 9,
+    marginVertical: 30,
+
+    // width: '100%',
   },
   modalBtnText: {
     fontSize: 19,

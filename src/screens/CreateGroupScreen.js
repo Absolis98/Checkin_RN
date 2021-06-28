@@ -144,6 +144,7 @@ const CreateGroupScreen = ({navigation, route}) => {
       ownersList[user.uid] = {
         ownerId: user.uid,
         username: user.username,
+        imageURL: user.imageURL,
       };
       for (let i = 0; i < addingPetsList.length; i++) {
         petsList[addingPetsList[i].petId] = addingPetsList[i];
@@ -524,7 +525,7 @@ const CreateGroupScreen = ({navigation, route}) => {
 
       {uploading ? (
         <View>
-          <Text>{transferred} % Completed!</Text>
+          <Text style={{textAlign: 'center'}}>{transferred} % Completed!</Text>
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
       ) : (

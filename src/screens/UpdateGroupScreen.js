@@ -291,6 +291,53 @@ const UpdateGroupScreen = ({navigation, route}) => {
     }
   };
 
+  const deleteGroup = async () => {
+    try {
+      const batch = firestore().batch();
+
+      const chunkForOthers = {};
+      const chunkForUser = {};
+
+      // remove pets for other users, user keeps pets
+      for (let i = 0; i < originalPetsList.length; i++) {
+        chunkForOthers[
+          `petsList.${originalPetsList[i].petId}`
+        ] = firestore.FieldValue.delete();
+        chunkForUser[`petsList.${originalPetsList[i].petId}.inGroup`] = false;
+      }
+
+      chunkForOthers[
+        `groupsList.${group.groupId}`
+      ] = firestore.FieldValue.delete();
+      chunkForUser[
+        `groupsList.${group.groupId}`
+      ] = firestore.FieldValue.delete();
+
+      for (let i = 0; i < originalOwnersList.length; i++) {
+        if (originalOwnersList[i].ownerId !== user.uid) {
+          let tmpUserRef = firestore()
+            .collection('users')
+            .doc(originalOwnersList[i].ownerId);
+          batch.update(tmpUserRef, chunkForOthers);
+        }
+      }
+
+      const userRef = firestore().collection('users').doc(user.uid);
+
+      batch.update(userRef, chunkForUser);
+
+      const groupRef = firestore().collection('groups').doc(group.groupId);
+
+      batch.delete(groupRef);
+
+      await batch.commit();
+
+      navigation.popToTop();
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const isInGroup = () => {
     let inGroup = false;
     for (let userGroup of user.groupsList) {
@@ -665,6 +712,25 @@ const UpdateGroupScreen = ({navigation, route}) => {
           </View>
         </TouchableOpacity>
       )}
+
+      <TouchableOpacity
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'rgb(220,53,69)',
+          paddingVertical: 12,
+          marginBottom: 10,
+          borderRadius: 20,
+          marginHorizontal: 40,
+          borderWidth: 1,
+          borderColor: 'rgba(0,0,0,0.2)',
+        }}
+        onPress={() => {
+          deleteGroup();
+          // navigation.pop();
+        }}>
+        <Text style={{color: 'white'}}>Delete Group</Text>
+      </TouchableOpacity>
 
       {isAddPhotoModalVisible || isAddPhotoModalVisible ? (
         <View

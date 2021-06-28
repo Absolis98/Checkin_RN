@@ -45,7 +45,7 @@ const GroupsOverviewScreen = ({navigation, route}) => {
 
   const isInGroup = () => {
     let inGroup = false;
-    if (!loading && group !== undefined) {
+    if (!loading && group) {
       for (let owner of group.ownersList) {
         if (owner.ownerId === user.uid) inGroup = true;
       }
