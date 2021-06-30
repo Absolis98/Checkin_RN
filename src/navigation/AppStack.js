@@ -40,17 +40,18 @@ const HomeStackScreen = ({navigation}) => (
   <HomeStack.Navigator
     screenOptions={{
       ...TransitionPresets.SlideFromRightIOS,
+      headerShown: false,
       // gestureEnabled: false,
-      headerStyle: {
-        backgroundColor: 'rgb(242,242,242)',
-        shadowColor: 'transparent', // ios
-        elevation: 0, // android
-      },
+      // headerStyle: {
+      //   backgroundColor: 'rgb(242,242,242)',
+      //   shadowColor: 'transparent', // ios
+      //   elevation: 0, // android
+      // },
       // headerTintColor: '#fff',
-      headerTitleStyle: {
-        fontSize: 27,
-        fontWeight: 'bold',
-      },
+      // headerTitleStyle: {
+      //   fontSize: 27,
+      //   fontWeight: 'bold',
+      // },
     }}
     headerMode="float">
     <HomeStack.Screen
@@ -58,6 +59,7 @@ const HomeStackScreen = ({navigation}) => (
       component={HomeScreen}
       options={{
         title: 'Checkin',
+        headerTitleAlign: 'center',
       }}
       // options={({navigation}) => {
       //   return {
@@ -171,7 +173,7 @@ const SettingsStackScreen = () => (
   <SettingsStack.Navigator
     screenOptions={{
       ...TransitionPresets.SlideFromRightIOS,
-      gestureEnabled: false,
+      // gestureEnabled: false,
       headerStyle: {
         backgroundColor: 'rgb(242,242,242)',
         shadowColor: 'transparent', // ios
@@ -179,6 +181,7 @@ const SettingsStackScreen = () => (
       },
       // headerTintColor: '#fff',
       headerTitleStyle: {
+        fontSize: 27,
         fontWeight: 'bold',
       },
     }}
@@ -188,6 +191,7 @@ const SettingsStackScreen = () => (
       component={SettingsScreen}
       options={{
         title: 'Settings',
+        headerTitleAlign: 'center',
       }}
     />
     <SettingsStack.Screen
