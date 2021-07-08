@@ -11,10 +11,12 @@ import {
   ImageBackground,
   Pressable,
   ActivityIndicator,
+  SafeAreaView,
 } from 'react-native';
 import {AuthContext} from '../context/AuthContext';
 import {UserContext} from '../context/UserContext';
 import {GroupContext} from '../context/GroupContext';
+import Icon from 'react-native-vector-icons/Feather';
 
 // let ownersList = [{name: 'Abraham'}, {name: 'Farid'}];
 
@@ -105,212 +107,296 @@ const GroupsOverviewScreen = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      {!loading && group && inGroup && group.groupId === groupId ? (
-        <View style={styles.container}>
-          <View style={styles.body}>
-            <TouchableOpacity
-              onPress={() => setImageModalVisable(!isImageModalVisible)}>
-              {group.imageURL ? (
-                <Image style={styles.avatar} source={{uri: group.imageURL}} />
-              ) : (
-                <Image
-                  style={styles.avatar}
-                  source={require('../assets/group.png')}
-                />
-              )}
-            </TouchableOpacity>
-            <Text style={{fontSize: 30, textAlign: 'center', marginBottom: 15}}>
-              {group.groupName}
-            </Text>
-            <View style={{flexDirection: 'row'}}>
-              <View style={styles.listContainer}>
-                <Text style={styles.headerText}>Pets</Text>
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  data={group.petsList}
-                  keyExtractor={(button) => button.petId}
-                  renderItem={({item}) => {
-                    return (
-                      <View>
-                        <TouchableOpacity
-                          style={[styles.CircleList]}
-                          onPress={() =>
-                            navigation.push('PetDashboardScreen', {
-                              petId: item.petId,
-                            })
-                          }>
-                          <View style={styles.button}>
-                            {item.imageURL !== null ? (
-                              <ImageBackground
-                                // style={styles.avatar}
-                                style={{width: 100, height: 100}}
-                                imageStyle={{borderRadius: 100}}
-                                source={{uri: item.imageURL}}></ImageBackground>
-                            ) : (
-                              <ImageBackground
-                                // style={styles.avatar}
-                                style={{width: 100, height: 100}}
-                                imageStyle={{borderRadius: 100}}
-                                source={
-                                  item.species === 'Dog'
-                                    ? require('../assets/dog.png')
-                                    : item.species === 'Cat'
-                                    ? require('../assets/cat.png')
-                                    : require('../assets/other.png')
-                                }></ImageBackground>
-                            )}
-                          </View>
-                        </TouchableOpacity>
-
-                        <Text style={styles.buttonText}>{item.name}</Text>
-                      </View>
-                    );
-                  }}
-                />
-              </View>
-              {/* <TouchableOpacity
-            style={styles.toNextScreenBtn}
-            onPress={() => {
-              console.log('hello there');
-              // if (!push) navigation.push('PetDashboardScreen', {pet});
-              // else navigation.push(push);
+      <View
+        style={{
+          height: '20%',
+          width: '100%',
+          backgroundColor: 'rgb(228, 146, 144)',
+          position: 'absolute',
+        }}></View>
+      <SafeAreaView style={{flex: 1}}>
+        <View style={{flex: 1}}>
+          <View
+            style={{
+              height: '40%',
+              width: '100%',
+              backgroundColor: 'rgb(228, 146, 144)',
+              borderBottomLeftRadius: 50,
+              borderBottomRightRadius: 50,
+              position: 'absolute',
             }}>
-            <View>
-              <Text>{'>'}</Text>
-            </View>
-          </TouchableOpacity> */}
-            </View>
-
-            <View style={({flex: 1}, {flexDirection: 'row'})}>
-              <View style={styles.listContainer}>
-                <Text style={styles.headerText}>Owners</Text>
-                <FlatList
-                  horizontal
-                  showsHorizontalScrollIndicator={false}
-                  data={group.ownersList}
-                  keyExtractor={(button) => button.ownerId}
-                  renderItem={({item}) => {
-                    return (
-                      <View>
-                        <Pressable
-                          style={[styles.CircleList]}
-                          // onPress={() => navigation.push('OwnerDashboardScreen')}
-                        >
-                          <View style={styles.button}>
-                            {item.imageURL ? (
-                              <ImageBackground
-                                // style={styles.avatar}
-                                style={{width: 100, height: 100}}
-                                imageStyle={{borderRadius: 100}}
-                                source={{uri: item.imageURL}}></ImageBackground>
-                            ) : (
-                              <ImageBackground
-                                // style={styles.avatar}
-                                style={{width: 130, height: 130}}
-                                imageStyle={{borderRadius: 100, marginTop: 15}}
-                                source={require('../assets/owner.png')}></ImageBackground>
-                            )}
-                          </View>
-                        </Pressable>
-                        <Text style={styles.buttonText}>{item.username}</Text>
-                      </View>
-                    );
-                  }}
-                />
-              </View>
-              {/* <TouchableOpacity
-            style={styles.toNextScreenBtn}
-            onPress={() => {
-              console.log('hello there');
-              // if (!push) navigation.push('PetDashboardScreen', {pet});
-              // else navigation.push(push);
-            }}>
-            <View>
-              <Text>{'>'}</Text>
-            </View>
-          </TouchableOpacity> */}
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                width: '100%',
+                paddingHorizontal: 20,
+              }}>
+              <TouchableOpacity
+                style={{
+                  paddingHorizontal: 10,
+                  paddingVertical: 10,
+                  borderRadius: 10,
+                  marginTop: 20,
+                  backgroundColor: ' rgba(180, 131, 135, 0.75)',
+                }}
+                onPress={() => navigation.pop()}>
+                <Icon name={'arrow-left'} size={30} color={'white'} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  paddingHorizontal: 10,
+                  paddingVertical: 10,
+                  borderRadius: 10,
+                  marginTop: 20,
+                  backgroundColor: ' rgba(180, 131, 135, 0.75)',
+                }}
+                onPress={() =>
+                  navigation.push('UpdateGroupScreen', {
+                    group: group,
+                    pets: user.petsList,
+                    owners: user.ownersList,
+                  })
+                }>
+                <Icon name={'edit'} size={30} color={'white'} />
+              </TouchableOpacity>
             </View>
           </View>
-          {/* <Button title="Add new pet" onPress={() => alert('Implement me!!!')} />
-      <Button title="Add new owner" onPress={() => alert('Implement me!!!')} /> */}
-
-          <TouchableOpacity
-            style={{
-              alignItems: 'center',
-              justifyContent: 'center',
-              backgroundColor: 'pink',
-              paddingVertical: 12,
-              marginBottom: 10,
-              borderRadius: 20,
-              marginHorizontal: 40,
-              borderWidth: 1,
-              borderColor: 'rgba(0,0,0,0.2)',
-            }}
-            onPress={() =>
-              navigation.push('UpdateGroupScreen', {
-                group: group,
-                pets: user.petsList,
-                owners: user.ownersList,
-              })
-            }>
-            <View>
-              <Text>Group Settings</Text>
-            </View>
-          </TouchableOpacity>
-
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={isImageModalVisible}
-            onRequestClose={() => setImageModalVisable(!isImageModalVisible)}>
-            <Pressable
-              onPress={() => setImageModalVisable(!isImageModalVisible)}
+          {!loading && group && inGroup && group.groupId === groupId ? (
+            <View
               style={{
-                height: '100%',
-                marginTop: 'auto',
-                justifyContent: 'center',
+                flex: 1,
                 alignItems: 'center',
-                backgroundColor: 'rgba(0,0,0, .4)',
+                marginTop: '20%',
               }}>
-              <View
-                style={{
-                  backgroundColor: 'black',
-                }}>
-                {group.imageURL !== null ? (
-                  <Image
-                    // style={styles.avatar}
-                    style={{
-                      height: 300,
-                      width: 300,
-                      margin: 5,
-                    }}
-                    source={{uri: group.imageURL}}
-                  />
+              <TouchableOpacity
+                style={[styles.avatar, {marginTop: '-10%'}]}
+                onPress={() => setImageModalVisable(!isImageModalVisible)}>
+                {group.imageURL ? (
+                  <Image style={styles.avatar} source={{uri: group.imageURL}} />
                 ) : (
                   <Image
-                    style={{
-                      height: 300,
-                      width: 300,
-                      margin: 5,
-                      backgroundColor: 'white',
-                    }}
+                    style={styles.avatar}
                     source={require('../assets/group.png')}
                   />
                 )}
+              </TouchableOpacity>
+              <Text
+                style={{
+                  fontSize: 60,
+                  fontWeight: '600',
+                  textAlign: 'center',
+                  color: 'white',
+                }}>
+                {group.groupName}
+              </Text>
+
+              <View style={{marginTop: '10%'}}>
+                <View style={styles.card}>
+                  <View style={styles.listContainer}>
+                    <Text style={styles.headerText}>Pets</Text>
+
+                    {group.petsList.length === 0 ? (
+                      <Text style={styles.headerText}>- No Pets...</Text>
+                    ) : (
+                      <FlatList
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        data={group.petsList}
+                        keyExtractor={(button) => button.petId}
+                        renderItem={({item}) => {
+                          return (
+                            <View>
+                              <TouchableOpacity
+                                style={styles.CircleList}
+                                onPress={() =>
+                                  navigation.push('PetDashboardScreen', {
+                                    petId: item.petId,
+                                  })
+                                }>
+                                <View style={styles.button}>
+                                  {item.imageURL ? (
+                                    <Image
+                                      // style={styles.avatar}
+                                      style={{
+                                        width: 100,
+                                        height: 100,
+                                        borderRadius: 100,
+                                      }}
+                                      source={{
+                                        uri: item.imageURL,
+                                      }}
+                                    />
+                                  ) : (
+                                    <Image
+                                      // style={styles.avatar}
+                                      style={{
+                                        width: 100,
+                                        height: 100,
+                                        borderRadius: 100,
+                                      }}
+                                      source={
+                                        item.species === 'Dog'
+                                          ? require('../assets/dog.png')
+                                          : item.species === 'Cat'
+                                          ? require('../assets/cat.png')
+                                          : require('../assets/other.png')
+                                      }
+                                    />
+                                  )}
+                                </View>
+                              </TouchableOpacity>
+
+                              <Text style={styles.buttonText}>{item.name}</Text>
+                            </View>
+                          );
+                        }}
+                      />
+                    )}
+                  </View>
+                  {/* <TouchableOpacity
+            style={styles.toNextScreenBtn}
+            onPress={() => {
+              console.log('hello there');
+              // if (!push) navigation.push('PetDashboardScreen', {pet});
+              // else navigation.push(push);
+            }}>
+            <View>
+              <Text>{'>'}</Text>
+            </View>
+          </TouchableOpacity> */}
+                </View>
+
+                <View style={styles.card}>
+                  <View style={styles.listContainer}>
+                    <Text style={styles.headerText}>Owners</Text>
+                    {group.ownersList.length === 0 ? (
+                      <Text style={styles.headerText}>- No Pets...</Text>
+                    ) : (
+                      <FlatList
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        data={group.ownersList}
+                        keyExtractor={(button) => button.ownerId}
+                        renderItem={({item}) => {
+                          return (
+                            <View>
+                              <View
+                                style={[styles.CircleList]}
+                                // onPress={() => navigation.push('OwnerDashboardScreen')}
+                              >
+                                <View style={styles.button}>
+                                  {item.imageURL ? (
+                                    <Image
+                                      // style={styles.avatar}
+                                      style={{
+                                        width: 100,
+                                        height: 100,
+                                        borderRadius: 100,
+                                      }}
+                                      source={{
+                                        uri: item.imageURL,
+                                      }}
+                                    />
+                                  ) : (
+                                    <Image
+                                      // style={styles.avatar}
+                                      style={{
+                                        width: 130,
+                                        height: 130,
+                                        borderRadius: 100,
+                                        marginTop: 15,
+                                      }}
+                                      source={require('../assets/owner.png')}
+                                    />
+                                  )}
+                                </View>
+                              </View>
+                              <Text style={styles.buttonText}>
+                                {item.username}
+                              </Text>
+                            </View>
+                          );
+                        }}
+                      />
+                    )}
+                  </View>
+                  {/* <TouchableOpacity
+            style={styles.toNextScreenBtn}
+            onPress={() => {
+              console.log('hello there');
+              // if (!push) navigation.push('PetDashboardScreen', {pet});
+              // else navigation.push(push);
+            }}>
+            <View>
+              <Text>{'>'}</Text>
+            </View>
+          </TouchableOpacity> */}
+                </View>
               </View>
-            </Pressable>
-          </Modal>
+              {/* <Button title="Add new pet" onPress={() => alert('Implement me!!!')} />
+      <Button title="Add new owner" onPress={() => alert('Implement me!!!')} /> */}
+
+              <Modal
+                animationType="fade"
+                transparent={true}
+                visible={isImageModalVisible}
+                onRequestClose={() =>
+                  setImageModalVisable(!isImageModalVisible)
+                }>
+                <Pressable
+                  onPress={() => setImageModalVisable(!isImageModalVisible)}
+                  style={{
+                    height: '100%',
+                    marginTop: 'auto',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: 'rgba(0,0,0, .4)',
+                  }}>
+                  <View
+                    style={{
+                      backgroundColor: 'black',
+                    }}>
+                    {group.imageURL !== null ? (
+                      <Image
+                        // style={styles.avatar}
+                        style={{
+                          height: 300,
+                          width: 300,
+                          margin: 5,
+                        }}
+                        source={{uri: group.imageURL}}
+                      />
+                    ) : (
+                      <Image
+                        style={{
+                          height: 300,
+                          width: 300,
+                          margin: 5,
+                          backgroundColor: 'white',
+                        }}
+                        source={require('../assets/group.png')}
+                      />
+                    )}
+                  </View>
+                </Pressable>
+              </Modal>
+            </View>
+          ) : (
+            (console.log('loading'),
+            (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <ActivityIndicator size="large" color="#0000ff" />
+              </View>
+            ))
+          )}
         </View>
-      ) : (
-        (console.log('loading'),
-        (
-          <View
-            style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-            <ActivityIndicator size="large" color="#0000ff" />
-          </View>
-        ))
-      )}
+      </SafeAreaView>
     </View>
   );
 };
@@ -320,17 +406,24 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   avatar: {
-    paddingHorizontal: 5,
-    paddingVertical: 10,
-    margin: 20,
+    margin: '5%',
     borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.2)',
     alignItems: 'center',
     justifyContent: 'center',
     width: 150,
     height: 150,
-    backgroundColor: '#fff',
     borderRadius: 30,
+    backgroundColor: 'white',
+  },
+  card: {
+    flexDirection: 'row',
+    borderWidth: 2,
+    borderColor: 'rgba(0,0,0,0.2)',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    marginBottom: 10,
+    marginHorizontal: 10,
   },
   body: {
     flex: 3,
@@ -378,7 +471,7 @@ const styles = StyleSheet.create({
     // borderTopWidth: 1,
     // borderBottomWidth: 1,
     width: '100%',
-    marginVertical: 5,
+    marginVertical: '2%',
   },
   buttonText: {
     color: 'black',

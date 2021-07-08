@@ -534,6 +534,8 @@ const styles = StyleSheet.create({
   },
   card: {
     flexDirection: 'row',
+    borderWidth: 2,
+    borderColor: 'rgba(0,0,0,0.2)',
     backgroundColor: '#FFFFFF',
     borderRadius: 20,
     marginBottom: 10,
@@ -583,10 +585,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 1,
+    borderLeftWidth: 2,
+    borderColor: 'rgba(28, 93, 153, 0.5)',
     backgroundColor: '#1C5D99',
-    borderTopRightRadius: 20,
-    borderBottomRightRadius: 20,
+    borderTopRightRadius: 18,
+    borderBottomRightRadius: 18,
   },
   nextScreenIcon: {color: 'white', fontSize: 22},
   inputContainer: {

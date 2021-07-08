@@ -10,13 +10,14 @@ import {
   Button,
   Image,
   Pressable,
+  SafeAreaView,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {AuthContext} from '../context/AuthContext';
 import {UserContext} from '../context/UserContext';
-import Icon from 'react-native-vector-icons/EvilIcons';
+import Icon from 'react-native-vector-icons/Feather';
 
-const OwnersScreen = () => {
+const OwnersScreen = ({navigation}) => {
   const {authUser} = useContext(AuthContext);
   const {user, addCoOwner, deleteCoOwner} = useContext(UserContext);
 
@@ -38,7 +39,55 @@ const OwnersScreen = () => {
   ];
   return (
     <View style={styles.container}>
-      <View style={{flex: 1, width: '100%'}}>
+      <View
+        style={{
+          height: '10%',
+          width: '100%',
+          backgroundColor: 'rgb(246, 174, 95)',
+          position: 'absolute',
+        }}></View>
+      <SafeAreaView style={{flex: 1, width: '100%'}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            width: '100%',
+            paddingHorizontal: 20,
+            backgroundColor: 'rgb(246, 174, 95)',
+          }}>
+          <TouchableOpacity
+            style={{
+              paddingHorizontal: 10,
+              paddingVertical: 10,
+              borderRadius: 10,
+              marginVertical: 20,
+              backgroundColor: ' rgba(180, 120, 50, 0.40)',
+            }}
+            onPress={() => navigation.pop()}>
+            <Icon name={'arrow-left'} size={30} color={'white'} />
+          </TouchableOpacity>
+          <Text
+            style={{
+              fontSize: 40,
+              color: 'white',
+            }}>
+            Owners
+          </Text>
+          <TouchableOpacity
+            style={{
+              paddingHorizontal: 10,
+              paddingVertical: 10,
+              borderRadius: 10,
+              marginVertical: 20,
+              backgroundColor: ' rgba(180, 120, 50, 0.40)',
+            }}
+            onPress={() => {
+              setAddModalVisible(!isAddModalVisible);
+            }}>
+            <Icon name={'user-plus'} size={30} color={'white'} />
+          </TouchableOpacity>
+        </View>
         <FlatList
           data={user.ownersList}
           bounces
@@ -72,7 +121,7 @@ const OwnersScreen = () => {
                     setSelectedOwner(item);
                   }}>
                   <Icon
-                    name={'trash'}
+                    name={'trash-2'}
                     size={40}
                     color={'rgb(220,53,69)'}
                     // iconStyle={{}}
@@ -82,7 +131,7 @@ const OwnersScreen = () => {
             );
           }}
         />
-      </View>
+      </SafeAreaView>
 
       {/* Add Owner Modal */}
       <Modal
@@ -215,28 +264,6 @@ const OwnersScreen = () => {
           </Pressable>
         </Pressable>
       </Modal>
-
-      <TouchableOpacity
-        style={{
-          position: 'absolute',
-          bottom: 20,
-          width: '70%',
-          alignItems: 'center',
-          justifyContent: 'center',
-          paddingVertical: 12,
-          borderRadius: 15,
-          shadowColor: 'rgba(0,0,0, .4)', // IOS
-          shadowOffset: {height: 1, width: 1}, // IOS
-          shadowOpacity: 1, // IOS
-          shadowRadius: 1, //IOS
-          elevation: 2, // Android
-          backgroundColor: 'pink',
-        }}
-        onPress={() => {
-          setAddModalVisible(!isAddModalVisible);
-        }}>
-        <Text>Add Co-Owner</Text>
-      </TouchableOpacity>
 
       {isAddModalVisible || isDeleteModalVisible ? (
         <View

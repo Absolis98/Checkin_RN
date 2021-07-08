@@ -9,10 +9,12 @@ import {
   Modal,
   FlatList,
   ActivityIndicator,
+  SafeAreaView,
 } from 'react-native';
 import ActionsButtonList from '../components/ActionsButtonList';
 import {PetContext} from '../context/PetContext';
 import {UserContext} from '../context/UserContext';
+import Icon from 'react-native-vector-icons/Feather';
 
 const dayKey = {
   Mon: 6,
@@ -62,7 +64,7 @@ const PetDashboardScreen = ({route, navigation}) => {
   console.log('is loading: ' + loading);
 
   let recordsList = [];
-  if (pet !== undefined)
+  if (pet)
     for (let actionDate in pet.actionRecords) {
       //order keys here
       let breadcrumbs = `${actionDate}`;
@@ -98,225 +100,293 @@ const PetDashboardScreen = ({route, navigation}) => {
     <View style={styles.container}>
       {!loading && pet && pet.petId === petId ? (
         <View style={styles.container}>
-          <View style={styles.body}>
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              ListHeaderComponent={
-                <>
-                  <ActionsButtonList
-                    title={'Essential'}
-                    incrementAction={incrementAction}
-                    username={user.username}
-                    pet={pet}
-                    type={'essential'}
-                  />
-                  <ActionsButtonList
-                    title={'To-do'}
-                    incrementAction={incrementAction}
-                    username={user.username}
-                    pet={pet}
-                    type={'todo'}
-                  />
-                  <ActionsButtonList
-                    title={'Medical'}
-                    incrementAction={incrementAction}
-                    username={user.username}
-                    pet={pet}
-                    type={'medical'}
-                  />
-                  <Text style={styles.headerText}>Week History</Text>
-                </>
-              }
-              data={hidden === false ? recordsList : null}
-              keyExtractor={(item, index) => index.toString()}
-              renderItem={({item}) => {
-                // console.log(item);
-                console.log(item);
-                console.log(item !== undefined);
-                return item !== undefined ? (
-                  <ActionsCard dayActions={item} />
-                ) : // <View>
-                //   <View style={styles.historySliver}>
-                //     <Text style={styles.historyText}>{item}</Text>
-                //   </View>
-                // </View>
-                null;
-              }}
-              ListFooterComponent={
-                <TouchableOpacity onPress={() => setHidden(!hidden)}>
-                  <View
-                    style={{
-                      backgroundColor: 'pink',
-                      marginVertical: 10,
-                      marginHorizontal: 15,
-                      borderRadius: 7,
-                      paddingVertical: 10,
-                      borderWidth: 1,
-                      borderColor: 'rgba(0,0,0,0.2)',
-                    }}>
-                    <Text style={{fontSize: 15, textAlign: 'center'}}>
-                      {hidden === true ? 'Show History' : 'Close History'}
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              }
-            />
-          </View>
-          <View style={styles.header}>
-            <TouchableOpacity
-              onPress={() => setImageModalVisable(!isImageModalVisible)}>
-              {console.log(pet.imageURL)}
-              {pet.imageURL !== null ? (
-                <Image
-                  // style={styles.avatar}
-                  style={{
-                    height: 130,
-                    width: 130,
-                    margin: 20,
-                    borderRadius: 100,
-                  }}
-                  source={{uri: pet.imageURL}}
-                />
-              ) : (
-                <Image
-                  style={{
-                    height: 130,
-                    width: 130,
-                    margin: 20,
-                    borderRadius: 100,
-                  }}
-                  source={
-                    pet.species === 'Dog'
-                      ? require('../assets/dog.png')
-                      : pet.species === 'Cat'
-                      ? require('../assets/cat.png')
-                      : require('../assets/other.png')
-                  }
-                />
-              )}
-            </TouchableOpacity>
-
-            <View style={styles.subHeader}>
-              <Text style={{fontSize: 28}}>{pet.name}</Text>
-              <Text style={{fontWeight: 'bold'}}>
-                Species:{' '}
-                <Text style={{fontSize: 15, fontWeight: 'normal'}}>
-                  {pet.species.charAt(0).toUpperCase() + pet.species.slice(1)}
-                </Text>
-              </Text>
-              <Text style={{fontWeight: 'bold'}}>
-                Gender:{' '}
-                <Text style={{fontSize: 15, fontWeight: 'normal'}}>
-                  {pet.gender.charAt(0).toUpperCase() + pet.gender.slice(1)}
-                </Text>
-              </Text>
-              <Text style={{fontWeight: 'bold'}}>
-                Breed: <Text style={{fontWeight: 'normal'}}>{pet.breed}</Text>
-              </Text>
-              <Text style={{fontWeight: 'bold'}}>
-                Age: <Text style={{fontWeight: 'normal'}}>{pet.age}</Text>
-              </Text>
-              <Text style={{fontWeight: 'bold'}}>
-                Weight:{' '}
-                <Text style={{fontWeight: 'normal'}}>{pet.weight} lbs</Text>{' '}
-              </Text>
+          <View
+            style={{
+              height: '10%',
+              width: '100%',
+              backgroundColor:
+                pet.gender === 'Male'
+                  ? '#4c86a8'
+                  : pet.gender === 'Female'
+                  ? '#e0777d'
+                  : '#ffc49b',
+              position: 'absolute',
+            }}></View>
+          <SafeAreaView style={{flex: 1}}>
+            <View style={{flex: 1}}>
               <View
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-evenly',
-                  flex: 1,
-                }}>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.push('UpdatePetScreen', {pet: pet})
-                  }>
-                  <View
-                    style={{
-                      backgroundColor: 'pink',
-                      marginTop: 10,
-                      marginBottom: 3,
-                      borderRadius: 7,
-                      paddingVertical: 4,
-                      borderWidth: 1,
-                      borderColor: 'rgba(0,0,0,0.2)',
-                      paddingHorizontal: 10,
-                    }}>
-                    <Text style={{fontSize: 15, textAlign: 'center'}}>
-                      Edit Info
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() =>
-                    navigation.push('UpdatePetScreen', {pet: pet})
-                  }>
-                  <View
-                    style={{
-                      backgroundColor: 'pink',
-                      marginTop: 10,
-                      marginBottom: 3,
-                      borderRadius: 7,
-                      paddingVertical: 4,
-                      borderWidth: 1,
-                      borderColor: 'rgba(0,0,0,0.2)',
-                      paddingHorizontal: 10,
-                    }}>
-                    <Text style={{fontSize: 15, textAlign: 'center'}}>
-                      Add to Group
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-          <Modal
-            animationType="fade"
-            transparent={true}
-            visible={isImageModalVisible}
-            onRequestClose={() => setImageModalVisable(!isImageModalVisible)}>
-            <Pressable
-              onPress={() => setImageModalVisable(!isImageModalVisible)}
-              style={{
-                height: '100%',
-                marginTop: 'auto',
-                justifyContent: 'center',
-                alignItems: 'center',
-                backgroundColor: 'rgba(0,0,0, .4)',
-              }}>
-              <View
-                style={{
-                  backgroundColor: 'black',
-                }}>
-                {pet.imageURL !== null ? (
-                  <Image
-                    // style={styles.avatar}
-                    style={{
-                      height: 300,
-                      width: 300,
-                      margin: 5,
+                style={[
+                  styles.container,
+                  {
+                    marginTop: '20%',
+                  },
+                ]}>
+                <View style={styles.body}>
+                  <FlatList
+                    showsVerticalScrollIndicator={false}
+                    ListHeaderComponent={
+                      <View style={{paddingTop: '38%'}}>
+                        <ActionsButtonList
+                          title={'Essential'}
+                          incrementAction={incrementAction}
+                          username={user.username}
+                          pet={pet}
+                          type={'essential'}
+                        />
+                        <ActionsButtonList
+                          title={'To-do'}
+                          incrementAction={incrementAction}
+                          username={user.username}
+                          pet={pet}
+                          type={'todo'}
+                        />
+                        <ActionsButtonList
+                          title={'Medical'}
+                          incrementAction={incrementAction}
+                          username={user.username}
+                          pet={pet}
+                          type={'medical'}
+                        />
+                        <Text style={styles.headerText}>Week History</Text>
+                      </View>
+                    }
+                    data={hidden === false ? recordsList : null}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({item}) => {
+                      // console.log(item);
+                      console.log(item);
+                      console.log(item !== undefined);
+                      return item !== undefined ? (
+                        <ActionsCard dayActions={item} />
+                      ) : // <View>
+                      //   <View style={styles.historySliver}>
+                      //     <Text style={styles.historyText}>{item}</Text>
+                      //   </View>
+                      // </View>
+                      null;
                     }}
-                    source={{uri: pet.imageURL}}
-                  />
-                ) : (
-                  <Image
-                    style={{
-                      height: 300,
-                      width: 300,
-                      margin: 5,
-                      backgroundColor: 'white',
-                    }}
-                    source={
-                      pet.species === 'Dog'
-                        ? require('../assets/dog.png')
-                        : pet.species === 'Cat'
-                        ? require('../assets/cat.png')
-                        : require('../assets/other.png')
+                    ListFooterComponent={
+                      <TouchableOpacity onPress={() => setHidden(!hidden)}>
+                        <View
+                          style={{
+                            backgroundColor: 'rgb(185, 185, 185)',
+                            marginVertical: 10,
+                            marginHorizontal: 15,
+                            borderRadius: 7,
+                            paddingVertical: 10,
+                            borderWidth: 1,
+                            borderColor: 'rgba(0,0,0,0.2)',
+                          }}>
+                          <Text style={{fontSize: 15, textAlign: 'center'}}>
+                            {hidden === true ? 'Show History' : 'Close History'}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
                     }
                   />
-                )}
+                </View>
+                <Modal
+                  animationType="fade"
+                  transparent={true}
+                  visible={isImageModalVisible}
+                  onRequestClose={() =>
+                    setImageModalVisable(!isImageModalVisible)
+                  }>
+                  <Pressable
+                    onPress={() => setImageModalVisable(!isImageModalVisible)}
+                    style={{
+                      height: '100%',
+                      marginTop: 'auto',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: 'rgba(0,0,0, .4)',
+                    }}>
+                    <View
+                      style={{
+                        backgroundColor: 'black',
+                      }}>
+                      {pet.imageURL !== null ? (
+                        <Image
+                          // style={styles.avatar}
+                          style={{
+                            height: 300,
+                            width: 300,
+                            margin: 5,
+                          }}
+                          source={{uri: pet.imageURL}}
+                        />
+                      ) : (
+                        <Image
+                          style={{
+                            height: 300,
+                            width: 300,
+                            margin: 5,
+                            backgroundColor: 'white',
+                          }}
+                          source={
+                            pet.species === 'Dog'
+                              ? require('../assets/dog.png')
+                              : pet.species === 'Cat'
+                              ? require('../assets/cat.png')
+                              : require('../assets/other.png')
+                          }
+                        />
+                      )}
+                    </View>
+                  </Pressable>
+                </Modal>
               </View>
-            </Pressable>
-          </Modal>
+
+              <View
+                style={{
+                  height: '32%',
+                  width: '100%',
+                  backgroundColor:
+                    pet.gender === 'Male'
+                      ? '#4c86a8'
+                      : pet.gender === 'Female'
+                      ? '#e0777d'
+                      : '#ffc49b',
+                  borderBottomLeftRadius: 50,
+                  borderBottomRightRadius: 50,
+                  position: 'absolute',
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                    paddingHorizontal: 20,
+                  }}>
+                  <TouchableOpacity
+                    style={{
+                      paddingHorizontal: 10,
+                      paddingVertical: 10,
+                      borderRadius: 10,
+                      marginTop: 20,
+                      backgroundColor: 'rgba(234, 240, 240, 0.30)',
+                    }}
+                    onPress={() => navigation.pop()}>
+                    <Icon name={'arrow-left'} size={30} color={'white'} />
+                  </TouchableOpacity>
+
+                  {!loading && pet && pet.petId === petId ? (
+                    <TouchableOpacity
+                      style={{
+                        paddingHorizontal: 10,
+                        paddingVertical: 10,
+                        borderRadius: 10,
+                        marginTop: 20,
+                        backgroundColor: 'rgba(234, 240, 240, 0.30)',
+                      }}
+                      onPress={() =>
+                        navigation.push('UpdatePetScreen', {pet: pet})
+                      }>
+                      <Icon name={'edit'} size={30} color={'white'} />
+                    </TouchableOpacity>
+                  ) : (
+                    <></>
+                  )}
+                </View>
+
+                <View style={styles.header}>
+                  <Text
+                    style={{
+                      fontSize: 40,
+                      marginTop: '-12%',
+                      color: 'white',
+                    }}>
+                    {pet.name}
+                  </Text>
+
+                  <View style={{flexDirection: 'row', marginTop: '-3%'}}>
+                    <TouchableOpacity
+                      style={{
+                        marginVertical: '5%',
+                        marginLeft: '10%',
+                      }}
+                      onPress={() =>
+                        setImageModalVisable(!isImageModalVisible)
+                      }>
+                      {console.log(pet.imageURL)}
+                      {pet.imageURL !== null ? (
+                        <Image
+                          // style={styles.avatar}
+                          style={{
+                            height: 130,
+                            width: 130,
+                            borderRadius: 30,
+                          }}
+                          source={{uri: pet.imageURL}}
+                        />
+                      ) : (
+                        <Image
+                          style={{
+                            height: 130,
+                            width: 130,
+                            borderRadius: 30,
+                            borderWidth: 1,
+                            backgroundColor: 'white',
+                            borderColor: 'rgba(0,0,0,0.2)',
+                          }}
+                          source={
+                            pet.species === 'Dog'
+                              ? require('../assets/dog.png')
+                              : pet.species === 'Cat'
+                              ? require('../assets/cat.png')
+                              : require('../assets/other.png')
+                          }
+                        />
+                      )}
+                    </TouchableOpacity>
+
+                    <View style={styles.subHeader}>
+                      <Text style={{fontWeight: '700', fontSize: 20}}>
+                        Species:{' '}
+                        <Text style={{fontSize: 20, fontWeight: 'normal'}}>
+                          {pet.species.charAt(0).toUpperCase() +
+                            pet.species.slice(1)}
+                        </Text>
+                      </Text>
+                      <Text style={{fontWeight: '700', fontSize: 20}}>
+                        Gender:{' '}
+                        <Text style={{fontSize: 20, fontWeight: 'normal'}}>
+                          {pet.gender.charAt(0).toUpperCase() +
+                            pet.gender.slice(1)}
+                        </Text>
+                      </Text>
+                      <Text style={{fontWeight: '700', fontSize: 20}}>
+                        Breed:{' '}
+                        <Text style={{fontSize: 20, fontWeight: 'normal'}}>
+                          {pet.breed}
+                        </Text>
+                      </Text>
+                      <Text style={{fontWeight: '700', fontSize: 20}}>
+                        Age:{' '}
+                        <Text style={{fontSize: 20, fontWeight: 'normal'}}>
+                          {pet.age}
+                        </Text>
+                      </Text>
+                      <Text style={{fontWeight: '700', fontSize: 20}}>
+                        Weight:{' '}
+                        <Text style={{fontSize: 20, fontWeight: 'normal'}}>
+                          {pet.weight} lbs
+                        </Text>{' '}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            {/* <Button
+        title="firestore"
+        onPress={() => {
+          navigation.push('dbConfig');
+          console.log('Hi');
+        }}
+      /> */}
+          </SafeAreaView>
         </View>
       ) : pet === null ? (
         <View
@@ -338,18 +408,15 @@ const PetDashboardScreen = ({route, navigation}) => {
           </TouchableOpacity>
         </View>
       ) : (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}>
           <ActivityIndicator size="large" color="#0000ff" />
         </View>
       )}
-
-      {/* <Button
-        title="firestore"
-        onPress={() => {
-          navigation.push('dbConfig');
-          console.log('Hi');
-        }}
-      /> */}
     </View>
   );
 };
@@ -360,13 +427,11 @@ const styles = StyleSheet.create({
     // backgroundColor: 'pink',
   },
   header: {
-    flexDirection: 'row',
     alignItems: 'center',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    backgroundColor: '#EFDEE4',
+    // backgroundColor: '#EFDEE4',
     width: '100%',
-    position: 'absolute',
   },
   avatar: {
     borderWidth: 1,
@@ -380,11 +445,10 @@ const styles = StyleSheet.create({
   subHeader: {
     marginLeft: 25,
     marginRight: 7,
+    marginTop: '5%',
     flex: 1,
   },
   body: {
-    flex: 3,
-    paddingTop: 180,
     // backgroundColor: '#EFDEE4',
   },
   title: {

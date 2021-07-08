@@ -10,6 +10,7 @@ import {
   Image,
 } from 'react-native';
 import {UserContext} from '../context/UserContext';
+import Icon from 'react-native-vector-icons/Feather';
 
 const GroupsScreen = ({navigation}) => {
   const {user} = useContext(UserContext);
@@ -61,31 +62,50 @@ const GroupsScreen = ({navigation}) => {
           flex: 1,
         }}>
         <View style={{flex: 1}}>
-          {/* <View
-            style={{
-              height: '10%',
-              paddingHorizontal: 10,
-              paddingVertical: 13,
-              borderRadius: 10,
-              marginTop: 30,
-              backgroundColor: '#eaf0f0',
-            }}>
-            <TouchableOpacity
-              style={{
-                position: 'absolute',
-              }}>
-              <Text>{'Hellllo'}</Text>
-            </TouchableOpacity>
-          </View> */}
           <View
             style={{
-              height: '40%',
+              height: '75%',
               width: '100%',
               backgroundColor: 'rgb(228, 146, 144)',
               borderBottomLeftRadius: 50,
               borderBottomRightRadius: 50,
               position: 'absolute',
             }}>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                width: '100%',
+                paddingHorizontal: 20,
+              }}>
+              <TouchableOpacity
+                style={{
+                  paddingHorizontal: 10,
+                  paddingVertical: 10,
+                  borderRadius: 10,
+                  marginTop: 20,
+                  backgroundColor: ' rgba(180, 131, 135, 0.75)',
+                }}
+                onPress={() => navigation.pop()}>
+                <Icon name={'arrow-left'} size={30} color={'white'} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
+                  paddingHorizontal: 10,
+                  paddingVertical: 10,
+                  borderRadius: 10,
+                  marginTop: 20,
+                  backgroundColor: ' rgba(180, 131, 135, 0.75)',
+                }}
+                onPress={() => {
+                  navigation.push('CreateGroupScreen', {
+                    username: user.username,
+                  });
+                }}>
+                <Icon name={'plus'} size={30} color={'white'} />
+              </TouchableOpacity>
+            </View>
             <View
               style={{
                 // backgroundColor: 'red',
@@ -99,57 +119,55 @@ const GroupsScreen = ({navigation}) => {
             </View>
           </View>
           <FlatList
-            contentContainerStyle={{paddingTop: 170}}
+            // bounces={false}
+            style={{marginTop: '60%', width: '100%'}}
+            contentContainerStyle={{alignItems: 'center'}}
             data={user.groupsList}
             keyExtractor={(button) => button.groupId}
             renderItem={({item}) => {
               console.log(item);
               return (
-                <View>
-                  <TouchableOpacity
-                    style={[styles.CircleList]}
-                    onPress={() =>
-                      navigation.push('GroupsOverviewScreen', {
-                        groupId: item.groupId,
-                        // user's co-owners and pets list
-                        // only purpose is to be used in update group screen
-                      })
-                    }>
-                    <View style={styles.button}>
-                      <View
-                        style={{
-                          position: 'absolute',
-                          left: 20,
-                          borderRadius: 20,
-                          borderWidth: 1,
-                          borderColor: 'rgba(0,0,0,0.2)',
-                          // backgroundColor: 'pink',
-                        }}>
-                        {item.imageURL ? (
-                          <ImageBackground
-                            // style={styles.avatar}
-                            style={{width: 125, height: 125}}
-                            imageStyle={{borderRadius: 20}}
-                            source={{uri: item.imageURL}}></ImageBackground>
-                        ) : (
-                          <ImageBackground
-                            // style={styles.avatar}
-                            style={{width: 125, height: 125}}
-                            imageStyle={{borderRadius: 20}}
-                            source={require('../assets/group.png')}></ImageBackground>
-                        )}
-                      </View>
+                <TouchableOpacity
+                  style={styles.groupButton}
+                  onPress={() =>
+                    navigation.push('GroupsOverviewScreen', {
+                      groupId: item.groupId,
+                      // user's co-owners and pets list
+                      // only purpose is to be used in update group screen
+                    })
+                  }>
+                  <View
+                    style={{
+                      position: 'absolute',
+                      left: 20,
+                      borderRadius: 20,
+                      borderWidth: 1,
+                      borderColor: 'rgba(0,0,0,0.2)',
+                      // backgroundColor: 'pink',
+                    }}>
+                    {item.imageURL ? (
+                      <ImageBackground
+                        // style={styles.avatar}
+                        style={{width: 125, height: 125}}
+                        imageStyle={{borderRadius: 20}}
+                        source={{uri: item.imageURL}}></ImageBackground>
+                    ) : (
+                      <ImageBackground
+                        // style={styles.avatar}
+                        style={{width: 125, height: 125}}
+                        imageStyle={{borderRadius: 20}}
+                        source={require('../assets/group.png')}></ImageBackground>
+                    )}
+                  </View>
 
-                      <Text style={styles.buttonText}>{item.name}</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
+                  <Text style={styles.buttonText}>{item.name}</Text>
+                </TouchableOpacity>
               );
             }}
           />
         </View>
       </SafeAreaView>
-      <View
+      {/* <View
         style={{
           position: 'absolute',
           top: 0,
@@ -158,30 +176,10 @@ const GroupsScreen = ({navigation}) => {
           bottom: 0,
           justifyContent: 'center',
           alignItems: 'center',
-        }}>
-        <TouchableOpacity
-          style={{
-            position: 'absolute',
-            bottom: 20,
-            width: '70%',
-            alignItems: 'center',
-            justifyContent: 'center',
-            paddingVertical: 12,
-            borderRadius: 15,
-            shadowColor: 'rgba(0,0,0, .4)', // IOS
-            shadowOffset: {height: 1, width: 1}, // IOS
-            shadowOpacity: 1, // IOS
-            shadowRadius: 1, //IOS
-            elevation: 2, // Android
-            backgroundColor: 'pink',
-          }}
-          onPress={() => {
-            navigation.push('CreateGroupScreen', {username: user.username});
-          }}>
-          <Text>Create New Group</Text>
-        </TouchableOpacity>
-      </View>
+          // backgroundColor: 'red',
+        }}> */}
     </View>
+    // </View>
   );
 };
 
@@ -200,16 +198,21 @@ const styles = StyleSheet.create({
     // backgroundColor: 'cyan',
     flexWrap: 'wrap',
   },
-  CircleList: {
-    paddingLeft: 5,
-    paddingRight: 5,
-    paddingTop: 5,
-    paddingBottom: 10,
+  groupButton: {
+    marginBottom: 10,
+    width: 380,
+    height: 200,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: 'rgba(0,0,0,0.2)',
     shadowColor: 'rgba(0,0,0, .4)', // IOS
     shadowOffset: {height: 1, width: 1}, // IOS
     shadowOpacity: 1, // IOS
     shadowRadius: 1, //IOS
     elevation: 2, // Android
+    backgroundColor: '#ffff',
+    borderRadius: 25,
   },
   buttonText: {
     color: 'black',
@@ -217,17 +220,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: '100%',
     paddingLeft: 70,
-  },
-  button: {
-    borderWidth: 1,
-    borderColor: 'rgba(0,0,0,0.2)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 400,
-    height: 200,
-    backgroundColor: '#fff',
-    borderRadius: 25,
-    // backgroundColor: '',
   },
   headerText: {
     fontWeight: '600',
