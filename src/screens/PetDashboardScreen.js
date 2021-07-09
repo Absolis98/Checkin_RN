@@ -109,7 +109,7 @@ const PetDashboardScreen = ({route, navigation}) => {
                   ? '#4c86a8'
                   : pet.gender === 'Female'
                   ? '#e0777d'
-                  : '#ffc49b',
+                  : '#F3B680',
               position: 'absolute',
             }}></View>
           <SafeAreaView style={{flex: 1}}>
@@ -121,11 +121,11 @@ const PetDashboardScreen = ({route, navigation}) => {
                     marginTop: '20%',
                   },
                 ]}>
-                <View style={styles.body}>
+                <View style={styles.buttonLists}>
                   <FlatList
                     showsVerticalScrollIndicator={false}
                     ListHeaderComponent={
-                      <View style={{paddingTop: '38%'}}>
+                      <View style={{paddingTop: '43%'}}>
                         <ActionsButtonList
                           title={'Essential'}
                           incrementAction={incrementAction}
@@ -169,7 +169,12 @@ const PetDashboardScreen = ({route, navigation}) => {
                       <TouchableOpacity onPress={() => setHidden(!hidden)}>
                         <View
                           style={{
-                            backgroundColor: 'rgb(185, 185, 185)',
+                            backgroundColor:
+                              pet.gender === 'Male'
+                                ? '#4c86a8'
+                                : pet.gender === 'Female'
+                                ? '#e0777d'
+                                : '#F3B680',
                             marginVertical: 10,
                             marginHorizontal: 15,
                             borderRadius: 7,
@@ -177,7 +182,12 @@ const PetDashboardScreen = ({route, navigation}) => {
                             borderWidth: 1,
                             borderColor: 'rgba(0,0,0,0.2)',
                           }}>
-                          <Text style={{fontSize: 15, textAlign: 'center'}}>
+                          <Text
+                            style={{
+                              fontSize: 18,
+                              textAlign: 'center',
+                              color: 'white',
+                            }}>
                             {hidden === true ? 'Show History' : 'Close History'}
                           </Text>
                         </View>
@@ -246,7 +256,7 @@ const PetDashboardScreen = ({route, navigation}) => {
                       ? '#4c86a8'
                       : pet.gender === 'Female'
                       ? '#e0777d'
-                      : '#ffc49b',
+                      : '#F3B680',
                   borderBottomLeftRadius: 50,
                   borderBottomRightRadius: 50,
                   position: 'absolute',
@@ -263,8 +273,8 @@ const PetDashboardScreen = ({route, navigation}) => {
                       paddingHorizontal: 10,
                       paddingVertical: 10,
                       borderRadius: 10,
-                      marginTop: 20,
-                      backgroundColor: 'rgba(234, 240, 240, 0.30)',
+                      marginTop: 15,
+                      backgroundColor: 'rgba(234, 240, 240, 0.35)',
                     }}
                     onPress={() => navigation.pop()}>
                     <Icon name={'arrow-left'} size={30} color={'white'} />
@@ -276,8 +286,8 @@ const PetDashboardScreen = ({route, navigation}) => {
                         paddingHorizontal: 10,
                         paddingVertical: 10,
                         borderRadius: 10,
-                        marginTop: 20,
-                        backgroundColor: 'rgba(234, 240, 240, 0.30)',
+                        marginTop: 15,
+                        backgroundColor: 'rgba(234, 240, 240, 0.35)',
                       }}
                       onPress={() =>
                         navigation.push('UpdatePetScreen', {pet: pet})
@@ -313,8 +323,8 @@ const PetDashboardScreen = ({route, navigation}) => {
                         <Image
                           // style={styles.avatar}
                           style={{
-                            height: 130,
-                            width: 130,
+                            height: 140,
+                            width: 140,
                             borderRadius: 30,
                           }}
                           source={{uri: pet.imageURL}}
@@ -322,8 +332,8 @@ const PetDashboardScreen = ({route, navigation}) => {
                       ) : (
                         <Image
                           style={{
-                            height: 130,
-                            width: 130,
+                            height: 140,
+                            width: 140,
                             borderRadius: 30,
                             borderWidth: 1,
                             backgroundColor: 'white',
@@ -341,38 +351,73 @@ const PetDashboardScreen = ({route, navigation}) => {
                     </TouchableOpacity>
 
                     <View style={styles.subHeader}>
-                      <Text style={{fontWeight: '700', fontSize: 20}}>
-                        Species:{' '}
-                        <Text style={{fontSize: 20, fontWeight: 'normal'}}>
-                          {pet.species.charAt(0).toUpperCase() +
-                            pet.species.slice(1)}
+                      {pet.species ? (
+                        <Text style={{fontWeight: '700', fontSize: 20}}>
+                          Species:{' '}
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 'normal',
+                              color: 'white',
+                            }}>
+                            {pet.species.charAt(0).toUpperCase() +
+                              pet.species.slice(1)}
+                          </Text>
                         </Text>
-                      </Text>
-                      <Text style={{fontWeight: '700', fontSize: 20}}>
-                        Gender:{' '}
-                        <Text style={{fontSize: 20, fontWeight: 'normal'}}>
-                          {pet.gender.charAt(0).toUpperCase() +
-                            pet.gender.slice(1)}
+                      ) : null}
+                      {pet.gender ? (
+                        <Text style={{fontWeight: '700', fontSize: 20}}>
+                          Gender:{' '}
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 'normal',
+                              color: 'white',
+                            }}>
+                            {pet.gender.charAt(0).toUpperCase() +
+                              pet.gender.slice(1)}
+                          </Text>
                         </Text>
-                      </Text>
-                      <Text style={{fontWeight: '700', fontSize: 20}}>
-                        Breed:{' '}
-                        <Text style={{fontSize: 20, fontWeight: 'normal'}}>
-                          {pet.breed}
+                      ) : null}
+                      {pet.breed ? (
+                        <Text style={{fontWeight: '700', fontSize: 20}}>
+                          Breed:{' '}
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 'normal',
+                              color: 'white',
+                            }}>
+                            {pet.breed}
+                          </Text>
                         </Text>
-                      </Text>
-                      <Text style={{fontWeight: '700', fontSize: 20}}>
-                        Age:{' '}
-                        <Text style={{fontSize: 20, fontWeight: 'normal'}}>
-                          {pet.age}
+                      ) : null}
+                      {pet.age ? (
+                        <Text style={{fontWeight: '700', fontSize: 20}}>
+                          Age:{' '}
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 'normal',
+                              color: 'white',
+                            }}>
+                            {pet.age}
+                          </Text>
                         </Text>
-                      </Text>
-                      <Text style={{fontWeight: '700', fontSize: 20}}>
-                        Weight:{' '}
-                        <Text style={{fontSize: 20, fontWeight: 'normal'}}>
-                          {pet.weight} lbs
-                        </Text>{' '}
-                      </Text>
+                      ) : null}
+                      {pet.weight ? (
+                        <Text style={{fontWeight: '700', fontSize: 20}}>
+                          Weight:{' '}
+                          <Text
+                            style={{
+                              fontSize: 20,
+                              fontWeight: 'normal',
+                              color: 'white',
+                            }}>
+                            {pet.weight} lbs
+                          </Text>{' '}
+                        </Text>
+                      ) : null}
                     </View>
                   </View>
                 </View>
@@ -448,7 +493,8 @@ const styles = StyleSheet.create({
     marginTop: '5%',
     flex: 1,
   },
-  body: {
+  buttonLists: {
+    marginHorizontal: 10,
     // backgroundColor: '#EFDEE4',
   },
   title: {

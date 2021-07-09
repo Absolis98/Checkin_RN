@@ -21,9 +21,9 @@ export default ActionsButtonList = ({
   // const sortedActions = sortData(pet.actions[type]);
 
   return (
-    <View style={({flex: 1}, {flexDirection: 'row'})}>
+    <View style={styles.card}>
       <View style={styles.listContainer}>
-        <Text style={{marginLeft: 15, fontSize: 28}}>{title}</Text>
+        <Text style={{marginLeft: 15, fontSize: 25}}>{title}</Text>
         <FlatList
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -52,15 +52,31 @@ export default ActionsButtonList = ({
         />
       </View>
       <TouchableOpacity
-        style={styles.toNextScreenBtn}
+        style={[
+          styles.toNextScreenBtn,
+          {
+            backgroundColor:
+              pet.gender === 'Male'
+                ? '#4c86a8'
+                : pet.gender === 'Female'
+                ? '#e0777d'
+                : '#F3B680',
+          },
+        ]}
         onPress={() => {
           navigation.push('ActionsOverviewScreen', {
             petId: pet.petId,
             actionType: type,
           });
         }}>
-        <View>
-          <Text>{'>'}</Text>
+        <View
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'rgba(234, 240, 240, 0.35)',
+          }}>
+          <Text style={{color: 'white', fontSize: 22}}>{'>'}</Text>
         </View>
       </TouchableOpacity>
     </View>
@@ -74,12 +90,19 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 10,
   },
+  card: {
+    flexDirection: 'row',
+    borderWidth: 2,
+    borderColor: 'rgba(0,0,0,0.2)',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    marginBottom: 5,
+  },
   listContainer: {
-    borderColor: 'gray',
-    borderBottomWidth: 1,
     // borderBottomWidth: 1,
     width: '90%',
-    marginVertical: 5,
+    borderBottomLeftRadius: 18,
+    borderTopLeftRadius: 18,
   },
   buttonText: {
     color: 'black',
@@ -96,10 +119,10 @@ const styles = StyleSheet.create({
   },
   toNextScreenBtn: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    backgroundColor: 'rgb(96, 169, 246)',
-    marginVertical: 5,
+    borderLeftWidth: 2,
+    borderColor: 'rgba(0, 0, 0,0.35)',
+    // backgroundColor: 'rgb(96, 169, 246)',
+    borderTopRightRadius: 18,
+    borderBottomRightRadius: 18,
   },
 });

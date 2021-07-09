@@ -11,6 +11,7 @@ import {
   Image,
   Pressable,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 import {AuthContext} from '../context/AuthContext';
@@ -39,19 +40,23 @@ const OwnersScreen = ({navigation}) => {
   ];
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          height: '10%',
-          width: '100%',
-          backgroundColor: 'rgb(246, 174, 95)',
-          position: 'absolute',
-        }}></View>
+      {Platform.OS === 'ios' ? (
+        <View
+          style={{
+            height: '10%',
+            width: '100%',
+            backgroundColor: 'rgb(246, 174, 95)',
+            position: 'absolute',
+          }}></View>
+      ) : null}
       <SafeAreaView style={{flex: 1, width: '100%'}}>
         <View
           style={{
             flexDirection: 'row',
             justifyContent: 'space-between',
             alignItems: 'center',
+            borderBottomLeftRadius: 35,
+            borderBottomRightRadius: 35,
             width: '100%',
             paddingHorizontal: 20,
             backgroundColor: 'rgb(246, 174, 95)',

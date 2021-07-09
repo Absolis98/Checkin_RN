@@ -5,9 +5,12 @@ import {
   View,
   Text,
   TouchableOpacity,
+  SafeAreaView,
+  Platform,
 } from 'react-native';
 import {PetContext} from '../context/PetContext';
 import PetActionForm from '../components/PetActionForm';
+import Icon from 'react-native-vector-icons/Feather';
 
 const EditPetActionScreen = ({navigation, route}) => {
   const {action, petId, actionType} = route.params;
@@ -15,47 +18,109 @@ const EditPetActionScreen = ({navigation, route}) => {
 
   return (
     <View style={{flex: 1}}>
-      {pet ? (
-        <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-            alignItems: 'center',
-          }}>
-          <PetActionForm
-            crudType={'Update'}
-            initialState={action}
-            deleteFunc={() =>
-              deleteAction(petId, actionType, action.name, () =>
-                navigation.pop(2),
-              )
-            }
-            onSubmit={(updatedAction) =>
-              updateAction(petId, actionType, action.name, updatedAction, () =>
-                navigation.pop(2),
-              )
-            }
-          />
-        </ScrollView>
-      ) : (
+      {Platform.OS === 'ios' ? (
         <View
           style={{
-            flex: 1,
+            height: '10%',
+            width: '100%',
+            backgroundColor:
+              pet.gender === 'Male'
+                ? '#4c86a8'
+                : pet.gender === 'Female'
+                ? '#e0777d'
+                : '#F3B680',
+            position: 'absolute',
+          }}></View>
+      ) : null}
+      <SafeAreaView style={{flex: 1, width: '100%'}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
             alignItems: 'center',
-            justifyContent: 'center',
+            width: '100%',
+            paddingHorizontal: 20,
+            borderBottomLeftRadius: 35,
+            borderBottomRightRadius: 35,
+            backgroundColor:
+              pet.gender === 'Male'
+                ? '#4c86a8'
+                : pet.gender === 'Female'
+                ? '#e0777d'
+                : '#F3B680',
           }}>
-          <Text style={{fontSize: 30}}>Pet was deleted :(</Text>
           <TouchableOpacity
-            onPress={() => navigation.popToTop()}
             style={{
-              backgroundColor: 'red',
-              padding: 15,
-              borderRadius: 15,
-              marginTop: 15,
-            }}>
-            <Text style={{color: 'white'}}>Navigate to Home</Text>
+              paddingHorizontal: 10,
+              paddingVertical: 10,
+              borderRadius: 10,
+              marginVertical: 20,
+              backgroundColor: 'rgba(234, 240, 240, 0.35)',
+            }}
+            onPress={() => navigation.pop()}>
+            <Icon name={'arrow-left'} size={30} color={'white'} />
           </TouchableOpacity>
+          <Text
+            style={{
+              fontSize: 40,
+              color: 'white',
+            }}>
+            Edit Action
+          </Text>
+          <View
+            style={{
+              paddingHorizontal: 10,
+              paddingVertical: 10,
+              borderRadius: 10,
+              marginVertical: 20,
+            }}></View>
         </View>
-      )}
+        {pet ? (
+          <ScrollView
+            contentContainerStyle={{
+              flexGrow: 1,
+              alignItems: 'center',
+            }}>
+            <PetActionForm
+              crudType={'Update'}
+              initialState={action}
+              deleteFunc={() =>
+                deleteAction(petId, actionType, action.name, () =>
+                  navigation.pop(2),
+                )
+              }
+              onSubmit={(updatedAction) =>
+                updateAction(
+                  petId,
+                  actionType,
+                  action.name,
+                  updatedAction,
+                  () => navigation.pop(2),
+                )
+              }
+            />
+          </ScrollView>
+        ) : (
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text style={{fontSize: 30}}>Pet was deleted :(</Text>
+            <TouchableOpacity
+              onPress={() => navigation.popToTop()}
+              style={{
+                backgroundColor: 'red',
+                padding: 15,
+                borderRadius: 15,
+                marginTop: 15,
+              }}>
+              <Text style={{color: 'white'}}>Navigate to Home</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </SafeAreaView>
     </View>
   );
 };

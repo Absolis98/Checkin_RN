@@ -197,7 +197,9 @@ const GroupsOverviewScreen = ({navigation, route}) => {
                     <Text style={styles.headerText}>Pets</Text>
 
                     {group.petsList.length === 0 ? (
-                      <Text style={styles.headerText}>- No Pets...</Text>
+                      <Text style={[styles.headerText, {color: 'gray'}]}>
+                        - No Pets...
+                      </Text>
                     ) : (
                       <FlatList
                         horizontal
