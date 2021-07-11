@@ -7,7 +7,7 @@ import {
   TextInput,
   TouchableOpacity,
   Modal,
-  Button,
+  SafeAreaView,
   Pressable,
   ActivityIndicator,
   Platform,
@@ -18,6 +18,7 @@ import UploadButton from '../api/PhotoStorage';
 import ImagePicker from 'react-native-image-crop-picker';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
+import Icon from 'react-native-vector-icons/Feather';
 
 const EditProfileScreen = ({route, navigation}) => {
   const {username, imageURL, userId} = route.params;
@@ -173,140 +174,189 @@ const EditProfileScreen = ({route, navigation}) => {
   };
 
   return (
-    <View style={{flex: 1, alignItems: 'center'}}>
-      <TouchableOpacity
-        style={styles.avatar}
-        onPress={() => setPhotoModalVisible(true)}>
-        {image ? (
-          <Image
-            // style={styles.avatar}
-            style={{width: 125, height: 125, borderRadius: 100}}
-            source={{uri: image}}
+    <View style={{flex: 1}}>
+      {Platform.OS === 'ios' ? (
+        <View
+          style={{
+            height: '10%',
+            width: '100%',
+            backgroundColor: '#564787',
+            position: 'absolute',
+          }}></View>
+      ) : null}
+      <SafeAreaView style={{flex: 1, alignItems: 'center'}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            borderBottomLeftRadius: 35,
+            borderBottomRightRadius: 35,
+            width: '100%',
+            paddingHorizontal: 20,
+            backgroundColor: '#564787',
+          }}>
+          <TouchableOpacity
+            style={{
+              paddingHorizontal: 10,
+              paddingVertical: 10,
+              borderRadius: 10,
+              marginVertical: 20,
+              backgroundColor: ' rgba(140, 140, 140, 0.40)',
+            }}
+            onPress={() => navigation.pop()}
+            onLongPress={() => navigation.popToTop()}>
+            <Icon name={'arrow-left'} size={30} color={'white'} />
+          </TouchableOpacity>
+          <Text
+            style={{
+              fontSize: 40,
+              color: 'white',
+            }}>
+            Edit Profile
+          </Text>
+          <View
+            style={{
+              paddingHorizontal: 25,
+              paddingVertical: 10,
+              borderRadius: 10,
+              marginVertical: 20,
+            }}></View>
+        </View>
+        <TouchableOpacity
+          style={styles.avatar}
+          onPress={() => setPhotoModalVisible(true)}>
+          {image ? (
+            <Image
+              // style={styles.avatar}
+              style={{width: 125, height: 125, borderRadius: 100}}
+              source={{uri: image}}
+            />
+          ) : (
+            <Image
+              // style={styles.avatar}
+              style={{width: 125, height: 125, borderRadius: 100}}
+              source={require('../assets/owner.png')}
+            />
+          )}
+        </TouchableOpacity>
+        <View style={styles.inputContainer}>
+          <Text style={styles.inputTitle}>Username:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Species"
+            autoCorrect={false}
+            value={name}
+            onChangeText={(newValue) => setUsername(newValue)}
           />
-        ) : (
-          <Image
-            // style={styles.avatar}
-            style={{width: 125, height: 125, borderRadius: 100}}
-            source={require('../assets/owner.png')}
-          />
-        )}
-      </TouchableOpacity>
-      <View style={styles.inputContainer}>
-        <Text style={styles.inputTitle}>Username:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Species"
-          autoCorrect={false}
-          value={name}
-          onChangeText={(newValue) => setUsername(newValue)}
-        />
-      </View>
-      {/* <UploadButton
+        </View>
+        {/* <UploadButton
         onPressUpload={submitForm}
         image={image}
         originalImage={originalImage}
       /> */}
 
-      {uploading ? (
-        <View>
-          <Text>{transferred} % Completed!</Text>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      ) : (
-        <TouchableOpacity
-          style={{
-            position: 'absolute',
-            bottom: 20,
-            width: '60%',
-            alignItems: 'center',
-            justifyContent: 'center',
-            paddingVertical: 12,
-            marginTop: 10,
-            borderRadius: 15,
-            marginLeft: 20,
-            marginRight: 5,
-            shadowColor: 'rgba(0,0,0, .4)', // IOS
-            shadowOffset: {height: 1, width: 1}, // IOS
-            shadowOpacity: 1, // IOS
-            shadowRadius: 1, //IOS
-            elevation: 2, // Android
-            backgroundColor: 'pink',
-          }}
-          onPress={() => {
-            console.log('save');
-            submitForm(name, image);
-            // navigation.pop();
-            // navigation.push('PetDashboardScreen', {
-            //   petId: petId,
-            // });
-          }}>
-          <Text>Save</Text>
-        </TouchableOpacity>
-      )}
+        {uploading ? (
+          <View>
+            <Text>{transferred} % Completed!</Text>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        ) : (
+          <TouchableOpacity
+            style={{
+              position: 'absolute',
+              bottom: 20,
+              width: '60%',
+              alignItems: 'center',
+              justifyContent: 'center',
+              paddingVertical: 12,
+              marginTop: 10,
+              borderRadius: 15,
+              marginLeft: 20,
+              marginRight: 5,
+              shadowColor: 'rgba(0,0,0, .4)', // IOS
+              shadowOffset: {height: 1, width: 1}, // IOS
+              shadowOpacity: 1, // IOS
+              shadowRadius: 1, //IOS
+              elevation: 2, // Android
+              backgroundColor: 'pink',
+            }}
+            onPress={() => {
+              console.log('save');
+              submitForm(name, image);
+              // navigation.pop();
+              // navigation.push('PetDashboardScreen', {
+              //   petId: petId,
+              // });
+            }}>
+            <Text>Save</Text>
+          </TouchableOpacity>
+        )}
 
-      {isAddPhotoModalVisible || isAddPhotoModalVisible ? (
-        <View
-          style={{
-            backgroundColor: 'rgba(0,0,0, .4)',
-            height: '100%',
-            width: '100%',
-            position: 'absolute',
-          }}></View>
-      ) : null}
+        {isAddPhotoModalVisible || isAddPhotoModalVisible ? (
+          <View
+            style={{
+              backgroundColor: 'rgba(0,0,0, .4)',
+              height: '100%',
+              width: '100%',
+              position: 'absolute',
+            }}></View>
+        ) : null}
 
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isAddPhotoModalVisible}
-        onRequestClose={() => {
-          setPhotoModalVisible(false);
-        }}>
-        <Pressable
-          onPress={() => {
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={isAddPhotoModalVisible}
+          onRequestClose={() => {
             setPhotoModalVisible(false);
-          }}
-          style={{
-            height: '100%',
-            marginTop: 'auto',
-            justifyContent: 'flex-end',
           }}>
           <Pressable
-            onPress={() => null}
+            onPress={() => {
+              setPhotoModalVisible(false);
+            }}
             style={{
-              height: '22%',
-              backgroundColor: 'white',
-              borderTopLeftRadius: 25,
-              borderTopRightRadius: 25,
+              height: '100%',
+              marginTop: 'auto',
+              justifyContent: 'flex-end',
             }}>
-            <View>
-              <TouchableOpacity
-                style={styles.modalBtn}
-                onPress={() => {
-                  takePhotoFromCamera();
-                }}>
-                <Text style={[styles.modalBtnText, {marginTop: 6}]}>
-                  Take Photo
-                </Text>
-              </TouchableOpacity>
+            <Pressable
+              onPress={() => null}
+              style={{
+                height: '22%',
+                backgroundColor: 'white',
+                borderTopLeftRadius: 25,
+                borderTopRightRadius: 25,
+              }}>
+              <View>
+                <TouchableOpacity
+                  style={styles.modalBtn}
+                  onPress={() => {
+                    takePhotoFromCamera();
+                  }}>
+                  <Text style={[styles.modalBtnText, {marginTop: 6}]}>
+                    Take Photo
+                  </Text>
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.modalBtn}
-                onPress={() => {
-                  choosePhotoFromLibrary();
-                }}>
-                <Text style={styles.modalBtnText}>Choose From Library</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.modalBtn}
-                onPress={() => {
-                  setPhotoModalVisible(!isAddPhotoModalVisible);
-                }}>
-                <Text style={styles.modalBtnText}>Cancel</Text>
-              </TouchableOpacity>
-            </View>
+                <TouchableOpacity
+                  style={styles.modalBtn}
+                  onPress={() => {
+                    choosePhotoFromLibrary();
+                  }}>
+                  <Text style={styles.modalBtnText}>Choose From Library</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.modalBtn}
+                  onPress={() => {
+                    setPhotoModalVisible(!isAddPhotoModalVisible);
+                  }}>
+                  <Text style={styles.modalBtnText}>Cancel</Text>
+                </TouchableOpacity>
+              </View>
+            </Pressable>
           </Pressable>
-        </Pressable>
-      </Modal>
+        </Modal>
+      </SafeAreaView>
     </View>
   );
 };

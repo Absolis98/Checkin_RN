@@ -18,6 +18,7 @@ import {
 import firestore from '@react-native-firebase/firestore';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
+import Icon from 'react-native-vector-icons/Feather';
 
 import {UserContext} from '../context/UserContext';
 
@@ -222,398 +223,462 @@ const CreateGroupScreen = ({navigation, route}) => {
   // console.log(addingPetsList.includes(0));
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={{flex: 1}}>
-        <View style={{alignItems: 'center'}}>
-          <Text style={styles.title}>Picture</Text>
-          <TouchableOpacity
-            onPress={() => setPhotoModalVisible(!isAddPhotoModalVisible)}>
-            {image !== null ? (
-              <Image style={styles.avatar} source={{uri: image}} />
-            ) : (
-              <View style={styles.avatar}>
-                <Text>+</Text>
-              </View>
-            )}
-          </TouchableOpacity>
-        </View>
-        <View style={styles.inputContainer}>
-          <Text style={styles.inputTitle}>Name:</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="Name"
-            autoCorrect={false}
-            value={groupName}
-            onChangeText={(newValue) => setGroupName(newValue)}
-          />
-        </View>
-
-        <View style={{borderTopWidth: 1, marginVertical: 10}}>
+    <View style={styles.container}>
+      <View
+        style={{
+          height: '20%',
+          width: '100%',
+          backgroundColor: 'rgb(228, 146, 144)',
+          position: 'absolute',
+        }}></View>
+      <SafeAreaView style={{flex: 1}}>
+        <View style={{flex: 1}}>
           <View
             style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginHorizontal: 10,
+              height: '40%',
+              width: '100%',
+              backgroundColor: 'rgb(228, 146, 144)',
+              borderBottomLeftRadius: 50,
+              borderBottomRightRadius: 50,
+              paddingVertical: 10,
+              position: 'absolute',
             }}>
-            <Text style={styles.headerText}>Pets</Text>
-            <TouchableOpacity
-              style={{paddingHorizontal: 10}}
-              onPress={() => {
-                setPetModalVisible(!isPetModalVisible);
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                width: '100%',
+                paddingHorizontal: 20,
               }}>
-              <Text style={{fontSize: 28, color: 'deepskyblue'}}>+</Text>
-            </TouchableOpacity>
-          </View>
+              <TouchableOpacity
+                style={{
+                  paddingHorizontal: 10,
+                  paddingVertical: 10,
+                  borderRadius: 10,
+                  backgroundColor: ' rgba(180, 131, 135, 0.75)',
+                }}
+                onPress={() => navigation.pop()}
+                onLongPress={() => navigation.popToTop()}>
+                <Icon name={'arrow-left'} size={30} color={'white'} />
+              </TouchableOpacity>
 
-          <FlatList
-            data={addingPetsList}
-            keyExtractor={(button) => button.petId}
-            horizontal
-            renderItem={({item}) => {
-              // console.log(item);
-              if (!item.inGroup)
-                return (
-                  <View>
-                    <TouchableOpacity
-                      style={[styles.CircleList]}
-                      // onPress={() =>
-                      //   navigation.push('PetDashboardScreen', {
-                      //     petId: item.petId,
-                      //   })
-                      // }
-                    >
-                      <View style={styles.button}>
-                        {item.imageURL !== null ? (
-                          <ImageBackground
-                            // style={styles.avatar}
-                            style={{width: 90, height: 90}}
-                            imageStyle={{borderRadius: 100}}
-                            source={{uri: item.imageURL}}></ImageBackground>
-                        ) : (
-                          <ImageBackground
-                            // style={styles.avatar}
-                            style={{width: 90, height: 90}}
-                            imageStyle={{borderRadius: 100}}
-                            source={
-                              item.species === 'Dog'
-                                ? require('../assets/dog.png')
-                                : item.species === 'Cat'
-                                ? require('../assets/cat.png')
-                                : require('../assets/other.png')
-                            }></ImageBackground>
-                        )}
-                      </View>
-                    </TouchableOpacity>
-                    <Text style={styles.buttonText}>{item.name}</Text>
+              <Text
+                style={{
+                  fontSize: 45,
+                  fontWeight: '600',
+                  textAlign: 'center',
+                  color: 'white',
+                }}>
+                Edit Group
+              </Text>
+              <View
+                style={{
+                  paddingHorizontal: 25,
+                  paddingVertical: 10,
+                  borderRadius: 10,
+                  marginVertical: 20,
+                }}></View>
+            </View>
+          </View>
+          <View style={{flexGrow: 1, marginTop: '20%'}}>
+            <View style={{alignItems: 'center'}}>
+              <TouchableOpacity
+                onPress={() => setPhotoModalVisible(!isAddPhotoModalVisible)}>
+                {image !== null ? (
+                  <Image style={styles.avatar} source={{uri: image}} />
+                ) : (
+                  <View style={styles.avatar}>
+                    <Text>+</Text>
                   </View>
-                );
-            }}
-          />
-        </View>
-        <View style={{borderTopWidth: 1, marginBottom: 10}}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginHorizontal: 10,
-            }}>
-            <Text style={styles.headerText}>Co-Owners</Text>
-            <TouchableOpacity
-              style={{paddingHorizontal: 10}}
-              onPress={() => {
-                setOwnerModalVisible(!isOwnerModalVisible);
-              }}>
-              <Text style={{fontSize: 28, color: 'deepskyblue'}}>+</Text>
-            </TouchableOpacity>
-          </View>
-          <FlatList
-            data={addingOwnersList}
-            keyExtractor={(button) => button.ownerId}
-            horizontal
-            renderItem={({item}) => {
-              // console.log(item);
-              return (
-                <View>
-                  <TouchableOpacity
-                    style={[styles.CircleList]}
-                    // onPress={() =>
-                    //   navigation.push('GroupsOverviewScreen', {item})
-                    // }
-                  >
-                    <View style={styles.button}>
-                      {item.imageURL ? (
-                        <ImageBackground
-                          // style={styles.avatar}
-                          style={{width: 90, height: 90}}
-                          imageStyle={{borderRadius: 100}}
-                          source={{uri: item.imageURL}}></ImageBackground>
-                      ) : (
-                        <ImageBackground
-                          // style={styles.avatar}
-                          style={{width: 110, height: 90}}
-                          imageStyle={{borderRadius: 100, marginTop: 15}}
-                          source={require('../assets/owner.png')}></ImageBackground>
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                  <Text style={styles.buttonText}>{item.username}</Text>
-                </View>
-              );
-            }}
-          />
-        </View>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={isPetModalVisible}
-          // onRequestClose={() => {
-          //   // this.closeButtonFunction()
-          // }}
-        >
-          <SafeAreaView
-            style={{
-              height: '50%',
-              marginTop: 'auto',
-              backgroundColor: '#DEDEDE',
-            }}>
-            <FlatList
-              data={user.petsList}
-              bounces
-              keyExtractor={(pets) => pets.petId}
-              renderItem={({item}) => {
-                if (!item.inGroup)
+                )}
+              </TouchableOpacity>
+            </View>
+            <View style={[styles.inputContainer, {marginBottom: '8%'}]}>
+              <Text style={styles.inputTitle}>Name:</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Name"
+                autoCorrect={false}
+                value={groupName}
+                onChangeText={(newValue) => setGroupName(newValue)}
+              />
+            </View>
+
+            <View style={{borderTopWidth: 1, marginVertical: 10}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginHorizontal: 10,
+                }}>
+                <Text style={styles.headerText}>Pets</Text>
+                <TouchableOpacity
+                  style={{paddingHorizontal: 10}}
+                  onPress={() => {
+                    setPetModalVisible(!isPetModalVisible);
+                  }}>
+                  <Text style={{fontSize: 28, color: 'deepskyblue'}}>+</Text>
+                </TouchableOpacity>
+              </View>
+
+              <FlatList
+                data={addingPetsList}
+                keyExtractor={(button) => button.petId}
+                horizontal
+                renderItem={({item}) => {
+                  // console.log(item);
+                  if (!item.inGroup)
+                    return (
+                      <View>
+                        <TouchableOpacity
+                          style={[styles.CircleList]}
+                          // onPress={() =>
+                          //   navigation.push('PetDashboardScreen', {
+                          //     petId: item.petId,
+                          //   })
+                          // }
+                        >
+                          <View style={styles.button}>
+                            {item.imageURL !== null ? (
+                              <ImageBackground
+                                // style={styles.avatar}
+                                style={{width: 90, height: 90}}
+                                imageStyle={{borderRadius: 100}}
+                                source={{uri: item.imageURL}}></ImageBackground>
+                            ) : (
+                              <ImageBackground
+                                // style={styles.avatar}
+                                style={{width: 90, height: 90}}
+                                imageStyle={{borderRadius: 100}}
+                                source={
+                                  item.species === 'Dog'
+                                    ? require('../assets/dog.png')
+                                    : item.species === 'Cat'
+                                    ? require('../assets/cat.png')
+                                    : require('../assets/other.png')
+                                }></ImageBackground>
+                            )}
+                          </View>
+                        </TouchableOpacity>
+                        <Text style={styles.buttonText}>{item.name}</Text>
+                      </View>
+                    );
+                }}
+              />
+            </View>
+            <View style={{borderTopWidth: 1, marginBottom: 10}}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginHorizontal: 10,
+                }}>
+                <Text style={styles.headerText}>Co-Owners</Text>
+                <TouchableOpacity
+                  style={{paddingHorizontal: 10}}
+                  onPress={() => {
+                    setOwnerModalVisible(!isOwnerModalVisible);
+                  }}>
+                  <Text style={{fontSize: 28, color: 'deepskyblue'}}>+</Text>
+                </TouchableOpacity>
+              </View>
+              <FlatList
+                data={addingOwnersList}
+                keyExtractor={(button) => button.ownerId}
+                horizontal
+                renderItem={({item}) => {
+                  // console.log(item);
                   return (
-                    <View
-                      style={{
-                        borderBottomWidth: 1,
-                        backgroundColor: addingPetsList.includes(item)
-                          ? 'gray'
-                          : null,
-                      }}>
-                      <Pressable
-                        onPress={() => {
-                          if (!addingPetsList.includes(item))
-                            setAddingPetsList([...addingPetsList, item]);
-                          else {
-                            let array = [...addingPetsList];
-                            array.splice(array.indexOf(item), 1);
-                            setAddingPetsList(array);
-                          }
-                        }}
-                        style={styles.nameContainer}>
-                        <View style={{flexDirection: 'row'}}>
-                          {item.imageURL !== null ? (
+                    <View>
+                      <TouchableOpacity
+                        style={[styles.CircleList]}
+                        // onPress={() =>
+                        //   navigation.push('GroupsOverviewScreen', {item})
+                        // }
+                      >
+                        <View style={styles.button}>
+                          {item.imageURL ? (
                             <ImageBackground
                               // style={styles.avatar}
-                              style={styles.image}
-                              imageStyle={{
-                                borderRadius: 100,
-                                borderWidth: 1,
-                                borderColor: 'rgba(0,0,0,0.2)',
-                              }}
+                              style={{width: 90, height: 90}}
+                              imageStyle={{borderRadius: 100}}
                               source={{uri: item.imageURL}}></ImageBackground>
                           ) : (
                             <ImageBackground
                               // style={styles.avatar}
-                              style={styles.image}
-                              imageStyle={{
-                                borderRadius: 100,
-                                borderWidth: 1,
-                                borderColor: 'rgba(0,0,0,0.2)',
-                              }}
-                              source={
-                                item.species === 'Dog'
-                                  ? require('../assets/dog.png')
-                                  : item.species === 'Cat'
-                                  ? require('../assets/cat.png')
-                                  : require('../assets/other.png')
-                              }></ImageBackground>
+                              style={{width: 110, height: 90}}
+                              imageStyle={{borderRadius: 100, marginTop: 15}}
+                              source={require('../assets/owner.png')}></ImageBackground>
                           )}
-                          <Text style={styles.nameStyle}>{item.name}</Text>
                         </View>
-                      </Pressable>
+                      </TouchableOpacity>
+                      <Text style={styles.buttonText}>{item.username}</Text>
                     </View>
                   );
-              }}
-            />
-            <TouchableOpacity
-              style={styles.modalBtn}
-              onPress={() => {
-                setPetModalVisible(!isPetModalVisible);
-              }}>
-              <Text style={styles.modalBtnText}>Close</Text>
-            </TouchableOpacity>
-          </SafeAreaView>
-        </Modal>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={isOwnerModalVisible}
-          // onRequestClose={() => {
-          //   // this.closeButtonFunction()
-          // }}
-        >
-          <SafeAreaView
-            style={{
-              height: '50%',
-              marginTop: 'auto',
-              backgroundColor: '#DEDEDE',
-            }}>
-            <FlatList
-              data={user.ownersList}
-              bounces
-              keyExtractor={(owner) => owner.ownerId}
-              renderItem={({item}) => {
-                return (
-                  <View
-                    style={{
-                      borderBottomWidth: 1,
-                      backgroundColor: addingOwnersList.includes(item)
-                        ? 'gray'
-                        : null,
-                    }}>
-                    <Pressable
-                      onPress={() => {
-                        if (!addingOwnersList.includes(item))
-                          setAddingOwnersList([...addingOwnersList, item]);
-                        else {
-                          let array = [...addingOwnersList];
-                          array.splice(array.indexOf(item), 1);
-                          setAddingOwnersList(array);
-                        }
-                      }}
-                      style={styles.nameContainer}>
-                      <View style={{flexDirection: 'row'}}>
-                        {item.imageURL ? (
-                          <ImageBackground
-                            // style={styles.avatar}
-                            style={styles.image}
-                            imageStyle={{
-                              borderRadius: 100,
-                              borderWidth: 1,
-                              borderColor: 'rgba(0,0,0,0.2)',
-                            }}
-                            source={{uri: item.imageURL}}></ImageBackground>
-                        ) : (
-                          <ImageBackground
-                            // style={styles.avatar}
-                            style={styles.image}
-                            imageStyle={{
-                              borderRadius: 100,
-                              borderWidth: 1,
-                              borderColor: 'rgba(0,0,0,0.2)',
-                            }}
-                            source={require('../assets/owner.png')}></ImageBackground>
-                        )}
-                        <Text style={styles.nameStyle}>{item.username}</Text>
-                      </View>
-                    </Pressable>
-                  </View>
-                );
-              }}
-            />
-            <TouchableOpacity
-              style={styles.modalBtn}
-              onPress={() => {
-                setOwnerModalVisible(!isOwnerModalVisible);
-              }}>
-              <Text style={styles.modalBtnText}>Close</Text>
-            </TouchableOpacity>
-          </SafeAreaView>
-        </Modal>
-      </View>
-
-      {uploading ? (
-        <View>
-          <Text style={{textAlign: 'center'}}>{transferred} % Completed!</Text>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      ) : (
-        <TouchableOpacity
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'pink',
-            paddingVertical: 12,
-            marginBottom: 10,
-            borderRadius: 20,
-            marginHorizontal: 40,
-            borderWidth: 1,
-            borderColor: 'rgba(0,0,0,0.2)',
-          }}
-          onPress={() => {
-            submitGroup();
-          }}>
-          <View>
-            <Text>Create Group</Text>
-          </View>
-        </TouchableOpacity>
-      )}
-
-      {isAddPhotoModalVisible || isAddPhotoModalVisible ? (
-        <View
-          style={{
-            backgroundColor: 'rgba(0,0,0, .4)',
-            height: '100%',
-            width: '100%',
-            position: 'absolute',
-          }}></View>
-      ) : null}
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isAddPhotoModalVisible}
-        onRequestClose={() => {
-          setPhotoModalVisible(false);
-        }}>
-        <Pressable
-          onPress={() => {
-            setPhotoModalVisible(false);
-          }}
-          style={{
-            height: '100%',
-            marginTop: 'auto',
-            justifyContent: 'flex-end',
-          }}>
-          <Pressable
-            onPress={() => null}
-            style={{
-              height: '22%',
-              backgroundColor: 'white',
-              borderTopLeftRadius: 25,
-              borderTopRightRadius: 25,
-            }}>
-            <View>
-              <TouchableOpacity
-                style={styles.photoModalBtn}
-                onPress={() => {
-                  takePhotoFromCamera();
-                }}>
-                <Text style={[styles.modalBtnText, {marginTop: 6}]}>
-                  Take Photo
-                </Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={styles.photoModalBtn}
-                onPress={() => {
-                  choosePhotoFromLibrary();
-                }}>
-                <Text style={styles.modalBtnText}>Choose From Library</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.photoModalBtn}
-                onPress={() => {
-                  setPhotoModalVisible(!isAddPhotoModalVisible);
-                }}>
-                <Text style={styles.modalBtnText}>Cancel</Text>
-              </TouchableOpacity>
+                }}
+              />
             </View>
-          </Pressable>
-        </Pressable>
-      </Modal>
-    </ScrollView>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={isPetModalVisible}
+              // onRequestClose={() => {
+              //   // this.closeButtonFunction()
+              // }}
+            >
+              <SafeAreaView
+                style={{
+                  height: '50%',
+                  marginTop: 'auto',
+                  backgroundColor: '#DEDEDE',
+                }}>
+                <FlatList
+                  data={user.petsList}
+                  bounces
+                  keyExtractor={(pets) => pets.petId}
+                  renderItem={({item}) => {
+                    if (!item.inGroup)
+                      return (
+                        <View
+                          style={{
+                            borderBottomWidth: 1,
+                            backgroundColor: addingPetsList.includes(item)
+                              ? 'gray'
+                              : null,
+                          }}>
+                          <Pressable
+                            onPress={() => {
+                              if (!addingPetsList.includes(item))
+                                setAddingPetsList([...addingPetsList, item]);
+                              else {
+                                let array = [...addingPetsList];
+                                array.splice(array.indexOf(item), 1);
+                                setAddingPetsList(array);
+                              }
+                            }}
+                            style={styles.nameContainer}>
+                            <View style={{flexDirection: 'row'}}>
+                              {item.imageURL !== null ? (
+                                <ImageBackground
+                                  // style={styles.avatar}
+                                  style={styles.image}
+                                  imageStyle={{
+                                    borderRadius: 100,
+                                    borderWidth: 1,
+                                    borderColor: 'rgba(0,0,0,0.2)',
+                                  }}
+                                  source={{
+                                    uri: item.imageURL,
+                                  }}></ImageBackground>
+                              ) : (
+                                <ImageBackground
+                                  // style={styles.avatar}
+                                  style={styles.image}
+                                  imageStyle={{
+                                    borderRadius: 100,
+                                    borderWidth: 1,
+                                    borderColor: 'rgba(0,0,0,0.2)',
+                                  }}
+                                  source={
+                                    item.species === 'Dog'
+                                      ? require('../assets/dog.png')
+                                      : item.species === 'Cat'
+                                      ? require('../assets/cat.png')
+                                      : require('../assets/other.png')
+                                  }></ImageBackground>
+                              )}
+                              <Text style={styles.nameStyle}>{item.name}</Text>
+                            </View>
+                          </Pressable>
+                        </View>
+                      );
+                  }}
+                />
+                <TouchableOpacity
+                  style={styles.modalBtn}
+                  onPress={() => {
+                    setPetModalVisible(!isPetModalVisible);
+                  }}>
+                  <Text style={styles.modalBtnText}>Close</Text>
+                </TouchableOpacity>
+              </SafeAreaView>
+            </Modal>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={isOwnerModalVisible}
+              // onRequestClose={() => {
+              //   // this.closeButtonFunction()
+              // }}
+            >
+              <SafeAreaView
+                style={{
+                  height: '50%',
+                  marginTop: 'auto',
+                  backgroundColor: '#DEDEDE',
+                }}>
+                <FlatList
+                  data={user.ownersList}
+                  bounces
+                  keyExtractor={(owner) => owner.ownerId}
+                  renderItem={({item}) => {
+                    return (
+                      <View
+                        style={{
+                          borderBottomWidth: 1,
+                          backgroundColor: addingOwnersList.includes(item)
+                            ? 'gray'
+                            : null,
+                        }}>
+                        <Pressable
+                          onPress={() => {
+                            if (!addingOwnersList.includes(item))
+                              setAddingOwnersList([...addingOwnersList, item]);
+                            else {
+                              let array = [...addingOwnersList];
+                              array.splice(array.indexOf(item), 1);
+                              setAddingOwnersList(array);
+                            }
+                          }}
+                          style={styles.nameContainer}>
+                          <View style={{flexDirection: 'row'}}>
+                            {item.imageURL ? (
+                              <ImageBackground
+                                // style={styles.avatar}
+                                style={styles.image}
+                                imageStyle={{
+                                  borderRadius: 100,
+                                  borderWidth: 1,
+                                  borderColor: 'rgba(0,0,0,0.2)',
+                                }}
+                                source={{uri: item.imageURL}}></ImageBackground>
+                            ) : (
+                              <ImageBackground
+                                // style={styles.avatar}
+                                style={styles.image}
+                                imageStyle={{
+                                  borderRadius: 100,
+                                  borderWidth: 1,
+                                  borderColor: 'rgba(0,0,0,0.2)',
+                                }}
+                                source={require('../assets/owner.png')}></ImageBackground>
+                            )}
+                            <Text style={styles.nameStyle}>
+                              {item.username}
+                            </Text>
+                          </View>
+                        </Pressable>
+                      </View>
+                    );
+                  }}
+                />
+                <TouchableOpacity
+                  style={styles.modalBtn}
+                  onPress={() => {
+                    setOwnerModalVisible(!isOwnerModalVisible);
+                  }}>
+                  <Text style={styles.modalBtnText}>Close</Text>
+                </TouchableOpacity>
+              </SafeAreaView>
+            </Modal>
+          </View>
+
+          {uploading ? (
+            <View>
+              <Text style={{textAlign: 'center'}}>
+                {transferred} % Completed!
+              </Text>
+              <ActivityIndicator size="large" color="#0000ff" />
+            </View>
+          ) : (
+            <TouchableOpacity
+              style={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'pink',
+                paddingVertical: 12,
+                marginBottom: 25,
+                borderRadius: 20,
+                marginHorizontal: 40,
+                borderWidth: 1,
+                borderColor: 'rgba(0,0,0,0.2)',
+              }}
+              onPress={() => {
+                submitGroup();
+              }}>
+              <View>
+                <Text>Create Group</Text>
+              </View>
+            </TouchableOpacity>
+          )}
+
+          {isAddPhotoModalVisible || isAddPhotoModalVisible ? (
+            <View
+              style={{
+                backgroundColor: 'rgba(0,0,0, .4)',
+                height: '100%',
+                width: '100%',
+                position: 'absolute',
+              }}></View>
+          ) : null}
+
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={isAddPhotoModalVisible}
+            onRequestClose={() => {
+              setPhotoModalVisible(false);
+            }}>
+            <Pressable
+              onPress={() => {
+                setPhotoModalVisible(false);
+              }}
+              style={{
+                height: '100%',
+                marginTop: 'auto',
+                justifyContent: 'flex-end',
+              }}>
+              <Pressable
+                onPress={() => null}
+                style={{
+                  height: '22%',
+                  backgroundColor: 'white',
+                  borderTopLeftRadius: 25,
+                  borderTopRightRadius: 25,
+                }}>
+                <View>
+                  <TouchableOpacity
+                    style={styles.photoModalBtn}
+                    onPress={() => {
+                      takePhotoFromCamera();
+                    }}>
+                    <Text style={[styles.modalBtnText, {marginTop: 6}]}>
+                      Take Photo
+                    </Text>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    style={styles.photoModalBtn}
+                    onPress={() => {
+                      choosePhotoFromLibrary();
+                    }}>
+                    <Text style={styles.modalBtnText}>Choose From Library</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.photoModalBtn}
+                    onPress={() => {
+                      setPhotoModalVisible(!isAddPhotoModalVisible);
+                    }}>
+                    <Text style={styles.modalBtnText}>Cancel</Text>
+                  </TouchableOpacity>
+                </View>
+              </Pressable>
+            </Pressable>
+          </Modal>
+        </View>
+      </SafeAreaView>
+    </View>
   );
 };
 
@@ -646,6 +711,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   input: {
+    backgroundColor: 'white',
     // width: '75%',
     height: 50,
     lineHeight: 21,
@@ -657,9 +723,11 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   inputTitle: {
-    fontSize: 17,
-    margin: 10,
-    marginRight: '75%',
+    color: 'white',
+    fontSize: 22,
+    marginTop: '-6%',
+    marginBottom: 10,
+    marginLeft: '-65%',
   },
   header: {
     flex: 0.35,

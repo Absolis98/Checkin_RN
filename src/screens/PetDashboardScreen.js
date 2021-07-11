@@ -31,27 +31,23 @@ const ActionsCard = ({dayActions}) => {
   console.log(dayActions);
 
   const date = Object.keys(dayActions)[0];
-  if (date !== 'flag')
-    return (
-      <View>
-        <Text style={{fontSize: 20, margin: 10}}>{date}</Text>
-        {dayActions[date]
-          .slice(0)
-          .reverse()
-          .map((record, index) => {
-            return (
-              <View style={styles.historySliver} key={index}>
-                <Text>{record}</Text>
-              </View>
-            );
-          })}
+  return (
+    <View>
+      <Text style={{fontSize: 20, margin: 10}}>{date}</Text>
+      {dayActions[date]
+        .slice(0)
+        .reverse()
+        .map((record, index) => {
+          return (
+            <View style={styles.historySliver} key={index}>
+              <Text>{record}</Text>
+            </View>
+          );
+        })}
 
-        {/* <Text style={styles.historyText}>{dayActions[date]}</Text> */}
-      </View>
-    );
-  else {
-    return null;
-  }
+      {/* <Text style={styles.historyText}>{dayActions[date]}</Text> */}
+    </View>
+  );
 };
 
 const PetDashboardScreen = ({route, navigation}) => {
@@ -125,7 +121,7 @@ const PetDashboardScreen = ({route, navigation}) => {
                   <FlatList
                     showsVerticalScrollIndicator={false}
                     ListHeaderComponent={
-                      <View style={{paddingTop: '43%'}}>
+                      <View style={{paddingTop: '47%'}}>
                         <ActionsButtonList
                           title={'Essential'}
                           incrementAction={incrementAction}
@@ -276,7 +272,8 @@ const PetDashboardScreen = ({route, navigation}) => {
                       marginTop: 15,
                       backgroundColor: 'rgba(234, 240, 240, 0.35)',
                     }}
-                    onPress={() => navigation.pop()}>
+                    onPress={() => navigation.pop()}
+                    onLongPress={() => navigation.popToTop()}>
                     <Icon name={'arrow-left'} size={30} color={'white'} />
                   </TouchableOpacity>
 
@@ -309,7 +306,7 @@ const PetDashboardScreen = ({route, navigation}) => {
                     {pet.name}
                   </Text>
 
-                  <View style={{flexDirection: 'row', marginTop: '-3%'}}>
+                  <View style={{flexDirection: 'row', marginTop: '-1%'}}>
                     <TouchableOpacity
                       style={{
                         marginVertical: '5%',
@@ -326,6 +323,8 @@ const PetDashboardScreen = ({route, navigation}) => {
                             height: 140,
                             width: 140,
                             borderRadius: 30,
+                            borderWidth: 3,
+                            borderColor: 'rgba(0,0,0,0.2)',
                           }}
                           source={{uri: pet.imageURL}}
                         />
@@ -335,7 +334,7 @@ const PetDashboardScreen = ({route, navigation}) => {
                             height: 140,
                             width: 140,
                             borderRadius: 30,
-                            borderWidth: 1,
+                            borderWidth: 3,
                             backgroundColor: 'white',
                             borderColor: 'rgba(0,0,0,0.2)',
                           }}

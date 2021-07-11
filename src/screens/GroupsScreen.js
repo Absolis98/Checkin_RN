@@ -87,7 +87,8 @@ const GroupsScreen = ({navigation}) => {
                   marginTop: 20,
                   backgroundColor: ' rgba(180, 131, 135, 0.75)',
                 }}
-                onPress={() => navigation.pop()}>
+                onPress={() => navigation.pop()}
+                onLongPress={() => navigation.popToTop()}>
                 <Icon name={'arrow-left'} size={30} color={'white'} />
               </TouchableOpacity>
               <TouchableOpacity

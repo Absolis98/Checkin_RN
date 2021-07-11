@@ -57,7 +57,8 @@ const EditPetActionScreen = ({navigation, route}) => {
               marginVertical: 20,
               backgroundColor: 'rgba(234, 240, 240, 0.35)',
             }}
-            onPress={() => navigation.pop()}>
+            onPress={() => navigation.pop()}
+            onLongPress={() => navigation.popToTop()}>
             <Icon name={'arrow-left'} size={30} color={'white'} />
           </TouchableOpacity>
           <Text
@@ -69,7 +70,7 @@ const EditPetActionScreen = ({navigation, route}) => {
           </Text>
           <View
             style={{
-              paddingHorizontal: 10,
+              paddingHorizontal: 25,
               paddingVertical: 10,
               borderRadius: 10,
               marginVertical: 20,

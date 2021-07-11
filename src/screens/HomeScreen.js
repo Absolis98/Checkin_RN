@@ -14,6 +14,7 @@ import {
   Pressable,
   ActivityIndicator,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
 import {UserContext} from '../context/UserContext';
 import {AuthContext} from '../context/AuthContext';
 
@@ -22,6 +23,11 @@ const HomeScreen = ({navigation}) => {
   console.log('is hermes running?');
   console.log(isHermes());
   console.log('running');
+
+  let today = new Date();
+  console.log(today.getDay());
+  console.log(today.setDate(today.getDate() + 3));
+  console.log(today.getDay());
 
   const {authUser} = useContext(AuthContext);
   const {user, pullUserData, addCoOwner} = useContext(UserContext);
@@ -333,6 +339,19 @@ const HomeScreen = ({navigation}) => {
               </ScrollView>
               <TouchableOpacity
                 style={{
+                  paddingHorizontal: 10,
+                  paddingVertical: 10,
+                  borderRadius: 10,
+                  backgroundColor: 'rgba(28, 93, 153, 0.4)',
+                  position: 'absolute',
+                  right: 20,
+                  top: 15,
+                }}
+                onPress={() => navigation.push('SettingsScreen')}>
+                <Icon name={'settings'} size={30} color={'white'} />
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={{
                   width: 75,
                   height: 75,
                   borderRadius: 100,
@@ -370,15 +389,6 @@ const HomeScreen = ({navigation}) => {
               <ActivityIndicator size="large" color="#0000ff" />
             </View>
           )}
-          {isActionModalVisible || isAddModalVisible ? (
-            <View
-              style={{
-                backgroundColor: 'rgba(0,0,0, .4)',
-                height: '100%',
-                width: '100%',
-                position: 'absolute',
-              }}></View>
-          ) : null}
         </View>
       </SafeAreaView>
       <Modal
@@ -521,6 +531,15 @@ const HomeScreen = ({navigation}) => {
           </Pressable>
         </Pressable>
       </Modal>
+      {isActionModalVisible || isAddModalVisible ? (
+        <View
+          style={{
+            backgroundColor: 'rgba(0,0,0, .4)',
+            height: '100%',
+            width: '100%',
+            position: 'absolute',
+          }}></View>
+      ) : null}
     </View>
   );
 };

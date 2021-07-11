@@ -73,13 +73,14 @@ const createDataChunk = (doc) => {
   console.log('pass');
   const today = new Date();
   console.log('Today is: ' + today.getDay());
-  if (today.getDay() === 1 && doc.actionRecords.flag === 1) {
+
+  if (today >= doc.actionRecords.resetDate) {
     // in the future, if we're keeping records, then add them to the
     // subcollection here before resetting the records
-    chunkToUpdate['actionRecords'] = {flag: 0};
-    docChanged = true;
-  } else if (today.getDay() !== 1 && doc.actionRecords.flag !== 1) {
-    chunkToUpdate['actionRecords.flag'] = 1;
+    today.getDay() !== 0
+      ? today.setDate(today.getDate() + (8 - today.getDay()))
+      : today.setDate(today.getDate() + 1);
+    chunkToUpdate['actionRecords'] = {resetDate: today.setHours(0, 0, 0, 0)};
     docChanged = true;
   }
   for (let actionTypeKey in doc.actions) {

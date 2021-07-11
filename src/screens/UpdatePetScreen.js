@@ -11,6 +11,7 @@ import {
   Pressable,
   Platform,
   ActivityIndicator,
+  SafeAreaView,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import firestore from '@react-native-firebase/firestore';
@@ -18,6 +19,7 @@ import storage from '@react-native-firebase/storage';
 import {AuthContext} from '../context/AuthContext';
 import {PetContext} from '../context/PetContext';
 import RadioButtonGroup from '../components/RadioButtonGroup';
+import Icon from 'react-native-vector-icons/Feather';
 
 const UpdatePetScreen = ({navigation, route}) => {
   const {authUser} = useContext(AuthContext);
@@ -196,232 +198,296 @@ const UpdatePetScreen = ({navigation, route}) => {
 
   return (
     <View style={{flex: 1}}>
-      {petContext ? (
-        <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-            alignItems: 'center',
-            // backgroundColor: 'pink',
-          }}>
-          <Text
-            style={[styles.inputTitle, {textAlign: 'center', paddingLeft: 0}]}>
-            Picture
-          </Text>
-
-          <TouchableOpacity
-            onPress={() => {
-              setPhotoModalVisible(!isAddPhotoModalVisible);
-            }}>
-            {image ? (
-              <Image
-                // style={styles.avatar}
-                style={styles.avatar}
-                imageStyle={{}}
-                source={{uri: image}}
-              />
-            ) : (
-              <View style={styles.avatar}>
-                <Text>+</Text>
-              </View>
-            )}
-          </TouchableOpacity>
-
-          <Text style={styles.inputTitle}>Name:</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Name"
-              autoCorrect={false}
-              value={name}
-              onChangeText={(newValue) => setName(newValue)}
-            />
-          </View>
-
-          <Text style={styles.inputTitle}>Species:</Text>
-          <RadioButtonGroup
-            buttonNames={['Dog', 'Cat', 'Other']}
-            initialState={pet.species}
-            changeValue={(species) => setSpecies(species)}
-            hiddenUITrigger={['Other']}
-            hiddenUI={
-              <View style={styles.inputContainer}>
-                <Text style={styles.inputTitle}>Please Specify:</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Species"
-                  autoCorrect={false}
-                  value={manualSpecies}
-                  onChangeText={(newValue) => setManualSpecies(newValue)}
-                />
-              </View>
-            }
-          />
-
-          <Text style={styles.inputTitle}>Gender:</Text>
-          <RadioButtonGroup
-            buttonNames={['Male', 'Female', 'Other']}
-            changeValue={(gender) => setGender(gender)}
-            initialState={pet.gender}
-          />
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputTitle}>Breed:</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Optional"
-              autoCorrect={false}
-              value={breed}
-              onChangeText={(newValue) => setBreed(newValue)}
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputTitle}>Age:</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Optional"
-              keyboardType="numeric"
-              autoCorrect={false}
-              value={age}
-              onChangeText={(newValue) => setAge(newValue)}
-            />
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={styles.inputTitle}>Weight:</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Optional"
-              keyboardType="numeric"
-              autoCorrect={false}
-              value={weight}
-              onChangeText={(newValue) => setWeight(newValue)}
-            />
-          </View>
-
-          {uploading ? (
-            <View>
-              <Text>{transferred} % Completed!</Text>
-              <ActivityIndicator size="large" color="#0000ff" />
-            </View>
-          ) : (
-            <TouchableOpacity
-              style={styles.updateBtn}
-              onPress={() => {
-                const petData = {
-                  name: name,
-                  species: species,
-                  gender: gender,
-                  breed: breed,
-                  age: age,
-                  weight: weight,
-                };
-                petData.species === 'Other'
-                  ? (petData.species = manualSpecies)
-                  : null;
-                submitPet(petData);
-                // navigation.pop();
-                // navigation.push('PetDashboardScreen', {
-                //   petId: petId,
-                // });
-              }}>
-              <Text>Update Pet</Text>
-            </TouchableOpacity>
-          )}
-          <TouchableOpacity
-            style={styles.deleteBtn}
-            onPress={() => {
-              // pet = createPet(name, species, gender, age, weight);
-              deletePet(authUser, pet);
-              navigation.popToTop();
-            }}>
-            <Text style={{color: 'white'}}>Delete Pet</Text>
-          </TouchableOpacity>
-
-          {isAddPhotoModalVisible || isAddPhotoModalVisible ? (
-            <View
-              style={{
-                backgroundColor: 'rgba(0,0,0, .4)',
-                height: '100%',
-                width: '100%',
-                position: 'absolute',
-              }}></View>
-          ) : null}
-
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={isAddPhotoModalVisible}
-            onRequestClose={() => {
-              setPhotoModalVisible(false);
-            }}>
-            <Pressable
-              onPress={() => {
-                setPhotoModalVisible(false);
-              }}
-              style={{
-                height: '100%',
-                marginTop: 'auto',
-                justifyContent: 'flex-end',
-              }}>
-              <Pressable
-                onPress={() => null}
-                style={{
-                  height: '22%',
-                  backgroundColor: 'white',
-                  borderTopLeftRadius: 25,
-                  borderTopRightRadius: 25,
-                }}>
-                <View>
-                  <TouchableOpacity
-                    style={styles.modalBtn}
-                    onPress={() => {
-                      takePhotoFromCamera();
-                    }}>
-                    <Text style={[styles.modalBtnText, {marginTop: 6}]}>
-                      Take Photo
-                    </Text>
-                  </TouchableOpacity>
-
-                  <TouchableOpacity
-                    style={styles.modalBtn}
-                    onPress={() => {
-                      choosePhotoFromLibrary();
-                    }}>
-                    <Text style={styles.modalBtnText}>Choose From Library</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.modalBtn}
-                    onPress={() => {
-                      setPhotoModalVisible(!isAddPhotoModalVisible);
-                    }}>
-                    <Text style={styles.modalBtnText}>Cancel</Text>
-                  </TouchableOpacity>
-                </View>
-              </Pressable>
-            </Pressable>
-          </Modal>
-        </ScrollView>
-      ) : (
+      {Platform.OS === 'ios' ? (
         <View
           style={{
-            flex: 1,
+            height: '10%',
+            width: '100%',
+            backgroundColor:
+              gender === 'Male'
+                ? '#4c86a8'
+                : gender === 'Female'
+                ? '#e0777d'
+                : '#F3B680',
+            position: 'absolute',
+          }}></View>
+      ) : null}
+      <SafeAreaView style={{flex: 1}}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
             alignItems: 'center',
-            justifyContent: 'center',
+            borderBottomLeftRadius: 35,
+            borderBottomRightRadius: 35,
+            width: '100%',
+            paddingHorizontal: 20,
+            backgroundColor:
+              gender === 'Male'
+                ? '#4c86a8'
+                : gender === 'Female'
+                ? '#e0777d'
+                : '#F3B680',
           }}>
-          <Text style={{fontSize: 30}}>Pet was deleted :(</Text>
           <TouchableOpacity
-            onPress={() => navigation.popToTop()}
             style={{
-              backgroundColor: 'red',
-              padding: 15,
-              borderRadius: 15,
-              marginTop: 15,
-            }}>
-            <Text style={{color: 'white'}}>Navigate to Home</Text>
+              paddingHorizontal: 10,
+              paddingVertical: 10,
+              borderRadius: 10,
+              marginVertical: 20,
+              backgroundColor: ' rgba(120, 130, 140, 0.45)',
+            }}
+            onPress={() => navigation.pop()}
+            onLongPress={() => navigation.popToTop()}>
+            <Icon name={'arrow-left'} size={30} color={'white'} />
           </TouchableOpacity>
+          <Text
+            style={{
+              fontSize: 40,
+              color: 'white',
+            }}>
+            Create Pet
+          </Text>
+          <View
+            style={{
+              paddingHorizontal: 20,
+              paddingVertical: 10,
+              borderRadius: 10,
+              marginVertical: 20,
+            }}></View>
         </View>
-      )}
+        {petContext ? (
+          <ScrollView
+            contentContainerStyle={{
+              flexGrow: 1,
+              alignItems: 'center',
+              // backgroundColor: 'pink',
+            }}>
+            <Text
+              style={[
+                styles.inputTitle,
+                {textAlign: 'center', paddingLeft: 0},
+              ]}>
+              Picture
+            </Text>
+
+            <TouchableOpacity
+              onPress={() => {
+                setPhotoModalVisible(!isAddPhotoModalVisible);
+              }}>
+              {image ? (
+                <Image
+                  // style={styles.avatar}
+                  style={styles.avatar}
+                  imageStyle={{}}
+                  source={{uri: image}}
+                />
+              ) : (
+                <View style={styles.avatar}>
+                  <Text>+</Text>
+                </View>
+              )}
+            </TouchableOpacity>
+
+            <Text style={styles.inputTitle}>Name:</Text>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.input}
+                placeholder="Name"
+                autoCorrect={false}
+                value={name}
+                onChangeText={(newValue) => setName(newValue)}
+              />
+            </View>
+
+            <Text style={styles.inputTitle}>Species:</Text>
+            <RadioButtonGroup
+              buttonNames={['Dog', 'Cat', 'Other']}
+              initialState={pet.species}
+              changeValue={(species) => setSpecies(species)}
+              hiddenUITrigger={['Other']}
+              hiddenUI={
+                <View style={styles.inputContainer}>
+                  <Text style={styles.inputTitle}>Please Specify:</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Species"
+                    autoCorrect={false}
+                    value={manualSpecies}
+                    onChangeText={(newValue) => setManualSpecies(newValue)}
+                  />
+                </View>
+              }
+            />
+
+            <Text style={styles.inputTitle}>Gender:</Text>
+            <RadioButtonGroup
+              buttonNames={['Male', 'Female', 'Other']}
+              changeValue={(gender) => setGender(gender)}
+              initialState={pet.gender}
+            />
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputTitle}>Breed:</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Optional"
+                autoCorrect={false}
+                value={breed}
+                onChangeText={(newValue) => setBreed(newValue)}
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputTitle}>Age:</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Optional"
+                keyboardType="numeric"
+                autoCorrect={false}
+                value={age}
+                onChangeText={(newValue) => setAge(newValue)}
+              />
+            </View>
+
+            <View style={styles.inputContainer}>
+              <Text style={styles.inputTitle}>Weight:</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Optional"
+                keyboardType="numeric"
+                autoCorrect={false}
+                value={weight}
+                onChangeText={(newValue) => setWeight(newValue)}
+              />
+            </View>
+
+            {uploading ? (
+              <View>
+                <Text>{transferred} % Completed!</Text>
+                <ActivityIndicator size="large" color="#0000ff" />
+              </View>
+            ) : (
+              <TouchableOpacity
+                style={styles.updateBtn}
+                onPress={() => {
+                  const petData = {
+                    name: name,
+                    species: species,
+                    gender: gender,
+                    breed: breed,
+                    age: age,
+                    weight: weight,
+                  };
+                  petData.species === 'Other'
+                    ? (petData.species = manualSpecies)
+                    : null;
+                  submitPet(petData);
+                  // navigation.pop();
+                  // navigation.push('PetDashboardScreen', {
+                  //   petId: petId,
+                  // });
+                }}>
+                <Text>Update Pet</Text>
+              </TouchableOpacity>
+            )}
+            <TouchableOpacity
+              style={styles.deleteBtn}
+              onPress={() => {
+                // pet = createPet(name, species, gender, age, weight);
+                deletePet(authUser, pet);
+                navigation.popToTop();
+              }}>
+              <Text style={{color: 'white'}}>Delete Pet</Text>
+            </TouchableOpacity>
+
+            {isAddPhotoModalVisible || isAddPhotoModalVisible ? (
+              <View
+                style={{
+                  backgroundColor: 'rgba(0,0,0, .4)',
+                  height: '100%',
+                  width: '100%',
+                  position: 'absolute',
+                }}></View>
+            ) : null}
+
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={isAddPhotoModalVisible}
+              onRequestClose={() => {
+                setPhotoModalVisible(false);
+              }}>
+              <Pressable
+                onPress={() => {
+                  setPhotoModalVisible(false);
+                }}
+                style={{
+                  height: '100%',
+                  marginTop: 'auto',
+                  justifyContent: 'flex-end',
+                }}>
+                <Pressable
+                  onPress={() => null}
+                  style={{
+                    height: '22%',
+                    backgroundColor: 'white',
+                    borderTopLeftRadius: 25,
+                    borderTopRightRadius: 25,
+                  }}>
+                  <View>
+                    <TouchableOpacity
+                      style={styles.modalBtn}
+                      onPress={() => {
+                        takePhotoFromCamera();
+                      }}>
+                      <Text style={[styles.modalBtnText, {marginTop: 6}]}>
+                        Take Photo
+                      </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                      style={styles.modalBtn}
+                      onPress={() => {
+                        choosePhotoFromLibrary();
+                      }}>
+                      <Text style={styles.modalBtnText}>
+                        Choose From Library
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.modalBtn}
+                      onPress={() => {
+                        setPhotoModalVisible(!isAddPhotoModalVisible);
+                      }}>
+                      <Text style={styles.modalBtnText}>Cancel</Text>
+                    </TouchableOpacity>
+                  </View>
+                </Pressable>
+              </Pressable>
+            </Modal>
+          </ScrollView>
+        ) : (
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <Text style={{fontSize: 30}}>Pet was deleted :(</Text>
+            <TouchableOpacity
+              onPress={() => navigation.popToTop()}
+              style={{
+                backgroundColor: 'red',
+                padding: 15,
+                borderRadius: 15,
+                marginTop: 15,
+              }}>
+              <Text style={{color: 'white'}}>Navigate to Home</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </SafeAreaView>
     </View>
   );
 };

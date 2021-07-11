@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
-  Button,
   Image,
   Pressable,
   SafeAreaView,
@@ -69,7 +68,8 @@ const OwnersScreen = ({navigation}) => {
               marginVertical: 20,
               backgroundColor: ' rgba(180, 120, 50, 0.40)',
             }}
-            onPress={() => navigation.pop()}>
+            onPress={() => navigation.pop()}
+            onLongPress={() => navigation.popToTop()}>
             <Icon name={'arrow-left'} size={30} color={'white'} />
           </TouchableOpacity>
           <Text

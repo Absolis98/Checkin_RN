@@ -58,7 +58,8 @@ const ActionsOverviewScreen = ({navigation, route}) => {
               marginVertical: 20,
               backgroundColor: 'rgba(234, 240, 240, 0.35)',
             }}
-            onPress={() => navigation.pop()}>
+            onPress={() => navigation.pop()}
+            onLongPress={() => navigation.popToTop()}>
             <Icon name={'arrow-left'} size={30} color={'white'} />
           </TouchableOpacity>
           <Text
