@@ -74,7 +74,10 @@ const createDataChunk = (doc) => {
   const today = new Date();
   console.log('Today is: ' + today.getDay());
 
-  if (today.getTime() >= doc.actionRecords.resetDate.getTime()) {
+  console.log(doc.actionRecords.resetDate.toDate().getTime());
+  console.log('[][]][][][][][][][][][][][][[[[]]]');
+
+  if (today.getTime() >= doc.actionRecords.resetDate.toDate().getTime()) {
     // in the future, if we're keeping records, then add them to the
     // subcollection here before resetting the records
     today.getDay() !== 0
