@@ -346,3 +346,166 @@ const styles = StyleSheet.create({
 });
 
 export default PetActionForm;
+
+// <RadioButtonGroup
+//           // add a "for ever x" option
+//           buttonNames={['Daily', 'Days', 'Week Days']}
+//           changeValue={(frequency) => setFrequency(frequency)}
+//           initialState={initialState?.frequency}
+//           hiddenUITrigger={['Daily', 'Days', 'Week Days']}
+//           hiddenUI={
+//             frequency === 'Daily' ? (
+//               <View style={{alignItems: 'center'}}>
+//                 {/* <Text>Daily</Text> */}
+//                 <Text style={{marginVertical: 10, fontSize: 20}}>
+//                   Repeat action how many times per day?
+//                 </Text>
+//                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
+//                   <TouchableOpacity
+//                     style={{
+//                       height: 47,
+//                       backgroundColor: 'skyblue',
+//                       padding: 14,
+//                       borderTopLeftRadius: 5,
+//                       borderBottomLeftRadius: 5,
+//                     }}
+//                     onPress={() => {
+//                       if (freqNum !== 0) setFreqNum(freqNum - 1);
+//                     }}>
+//                     <Text style={{fontWeight: 'bold', fontSize: 16}}>-</Text>
+//                   </TouchableOpacity>
+//                   <TextInput
+//                     style={{
+//                       height: 47,
+//                       width: 35,
+//                       borderWidth: 1,
+//                       borderColor: 'rgba(0,0,0,0.2)',
+//                       padding: 10,
+//                     }}
+//                     value={freqNum.toString()}
+//                     onChangeText={(newValue) => setFreqNum(newValue)}
+//                   />
+//                   <TouchableOpacity
+//                     style={{
+//                       height: 47,
+//                       backgroundColor: 'skyblue',
+//                       padding: 14,
+//                       borderTopRightRadius: 5,
+//                       borderBottomRightRadius: 5,
+//                     }}
+//                     onPress={() => {
+//                       if (freqNum !== 15) setFreqNum(freqNum + 1);
+//                     }}>
+//                     <Text style={{fontWeight: 'bold', fontSize: 16}}>+</Text>
+//                   </TouchableOpacity>
+//                 </View>
+
+//                 {/* <Text>At what time?</Text> */}
+//               </View>
+//             ) : frequency === 'Days' ? (
+//               <View>
+//                 <Text>weekly input form</Text>
+//                 <Text>Repeat action after how many days?</Text>
+//                 <View style={{alignItems: 'center'}}>
+//                   {/* <Text>Daily</Text> */}
+//                   <Text style={{marginVertical: 10, fontSize: 20}}>
+//                     Repeat action after how many days?
+//                   </Text>
+//                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
+//                     <TouchableOpacity
+//                       style={{
+//                         height: 47,
+//                         backgroundColor: 'skyblue',
+//                         padding: 14,
+//                         borderTopLeftRadius: 5,
+//                         borderBottomLeftRadius: 5,
+//                       }}
+//                       onPress={() => {
+//                         if (freqNum !== 0) setFreqNum(freqNum - 1);
+//                       }}>
+//                       <Text style={{fontWeight: 'bold', fontSize: 16}}>-</Text>
+//                     </TouchableOpacity>
+//                     <TextInput
+//                       style={{
+//                         height: 47,
+//                         width: 35,
+//                         borderWidth: 1,
+//                         borderColor: 'rgba(0,0,0,0.2)',
+//                         padding: 10,
+//                       }}
+//                       value={freqNum.toString()}
+//                       onChangeText={(newValue) => setFreqNum(newValue)}
+//                     />
+//                     <TouchableOpacity
+//                       style={{
+//                         height: 47,
+//                         backgroundColor: 'skyblue',
+//                         padding: 14,
+//                         borderTopRightRadius: 5,
+//                         borderBottomRightRadius: 5,
+//                       }}
+//                       onPress={() => {
+//                         if (freqNum !== 15) setFreqNum(freqNum + 1);
+//                       }}>
+//                       <Text style={{fontWeight: 'bold', fontSize: 16}}>+</Text>
+//                     </TouchableOpacity>
+//                   </View>
+
+//                   {/* <Text>At what time?</Text> */}
+//                 </View>
+//               </View>
+//             ) : frequency === 'Week Days' ? (
+//               <View>
+//                 <Text>montly input form</Text>
+//                 <Text>How many times, which days, what time</Text>
+//                 <View style={{alignItems: 'center'}}>
+//                   {/* <Text>Daily</Text> */}
+//                   <Text style={{marginVertical: 10, fontSize: 20}}>
+//                     Repeat action on which days of the week?
+//                   </Text>
+//                   <View style={{flexDirection: 'row', alignItems: 'center'}}>
+//                     <TouchableOpacity
+//                       style={{
+//                         height: 47,
+//                         backgroundColor: 'skyblue',
+//                         padding: 14,
+//                         borderTopLeftRadius: 5,
+//                         borderBottomLeftRadius: 5,
+//                       }}
+//                       onPress={() => {
+//                         if (freqNum !== 0) setFreqNum(freqNum - 1);
+//                       }}>
+//                       <Text style={{fontWeight: 'bold', fontSize: 16}}>-</Text>
+//                     </TouchableOpacity>
+//                     <TextInput
+//                       style={{
+//                         height: 47,
+//                         width: 35,
+//                         borderWidth: 1,
+//                         borderColor: 'rgba(0,0,0,0.2)',
+//                         padding: 10,
+//                       }}
+//                       value={freqNum.toString()}
+//                       onChangeText={(newValue) => setFreqNum(newValue)}
+//                     />
+//                     <TouchableOpacity
+//                       style={{
+//                         height: 47,
+//                         backgroundColor: 'skyblue',
+//                         padding: 14,
+//                         borderTopRightRadius: 5,
+//                         borderBottomRightRadius: 5,
+//                       }}
+//                       onPress={() => {
+//                         if (freqNum !== 15) setFreqNum(freqNum + 1);
+//                       }}>
+//                       <Text style={{fontWeight: 'bold', fontSize: 16}}>+</Text>
+//                     </TouchableOpacity>
+//                   </View>
+
+//                   {/* <Text>At what time?</Text> */}
+//                 </View>
+//               </View>
+//             ) : null
+//           }
+//         />

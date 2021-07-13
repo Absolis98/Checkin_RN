@@ -74,13 +74,15 @@ const createDataChunk = (doc) => {
   const today = new Date();
   console.log('Today is: ' + today.getDay());
 
-  if (today >= doc.actionRecords.resetDate) {
+  if (today.getTime() >= doc.actionRecords.resetDate.getTime()) {
     // in the future, if we're keeping records, then add them to the
     // subcollection here before resetting the records
     today.getDay() !== 0
       ? today.setDate(today.getDate() + (8 - today.getDay()))
       : today.setDate(today.getDate() + 1);
-    chunkToUpdate['actionRecords'] = {resetDate: today.setHours(0, 0, 0, 0)};
+    chunkToUpdate['actionRecords'] = {
+      resetDate: new Date(today.setHours(0, 0, 0, 0)),
+    };
     docChanged = true;
   }
   for (let actionTypeKey in doc.actions) {

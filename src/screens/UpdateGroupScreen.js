@@ -513,8 +513,7 @@ const UpdateGroupScreen = ({navigation, route}) => {
                             position: 'absolute',
                             right: 0,
                             backgroundColor: 'red',
-                            paddingVertical: 5,
-                            paddingHorizontal: 10,
+                            padding: 3,
                             borderRadius: 100,
                           }}
                           onPress={() => {
@@ -522,7 +521,7 @@ const UpdateGroupScreen = ({navigation, route}) => {
                             array.splice(array.indexOf(item), 1);
                             setAddingPetsList(array);
                           }}>
-                          <Text>X</Text>
+                          <Icon name={'x'} size={20} color={'white'} />
                         </TouchableOpacity>
                         <Text style={styles.buttonText}>{item.name}</Text>
                       </View>
@@ -583,8 +582,7 @@ const UpdateGroupScreen = ({navigation, route}) => {
                             position: 'absolute',
                             right: 0,
                             backgroundColor: 'red',
-                            paddingVertical: 5,
-                            paddingHorizontal: 10,
+                            padding: 3,
                             borderRadius: 100,
                           }}
                           onPress={() => {
@@ -592,7 +590,7 @@ const UpdateGroupScreen = ({navigation, route}) => {
                             array.splice(array.indexOf(item), 1);
                             setAddingOwnersList(array);
                           }}>
-                          <Text>X</Text>
+                          <Icon name={'x'} size={20} color={'white'} />
                         </TouchableOpacity>
                         <Text style={styles.buttonText}>{item.username}</Text>
                       </View>

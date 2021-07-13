@@ -11,6 +11,46 @@ import {
 import {PetContext} from '../context/PetContext';
 import Icon from 'react-native-vector-icons/Feather';
 
+const createDateString = (date, frequency) => {
+  const newDate = new Date(
+    date.setDate(
+      date.getDate() +
+        (frequency === 'daily'
+          ? 1
+          : frequency === 'weekly'
+          ? 7
+          : frequency === 'monthly'
+          ? 31
+          : 365),
+    ),
+  );
+  let months = [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ];
+  let days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+  return (
+    days[newDate.getDay()] +
+    ' ' +
+    months[newDate.getMonth()] +
+    ' ' +
+    newDate.getDate() +
+    ' ' +
+    newDate.getFullYear()
+  );
+};
+
 const ActionsOverviewScreen = ({navigation, route}) => {
   const {petId, actionType} = route.params;
   const {pet} = useContext(PetContext);
@@ -93,6 +133,8 @@ const ActionsOverviewScreen = ({navigation, route}) => {
                 data={pet.actions[actionType]}
                 keyExtractor={(button) => button.name}
                 renderItem={({item}) => {
+                  let asdf = new Date(item.currentDayTime.toDate());
+                  console.log(asdf);
                   // console.log(item);
                   return (
                     <View style={styles.button}>
@@ -105,19 +147,34 @@ const ActionsOverviewScreen = ({navigation, route}) => {
                           petId: petId,
                         })
                       }> */}
-                      <View style={{alignItems: 'center'}}>
+
+                      <View
+                        style={{
+                          marginLeft: '20%',
+                          flex: 3,
+                          alignItems: 'center',
+                        }}>
                         <Text style={styles.actionName}>{item.name}</Text>
                         <Text>{item.description}</Text>
                         <Text>{item.frequency}</Text>
+                        <Text style={{fontWeight: 'bold'}}>
+                          Upcomming reset:
+                        </Text>
+                        <Text>
+                          {createDateString(
+                            item.currentDayTime.toDate(),
+                            item.frequency,
+                          )}
+                        </Text>
                         <Text>
                           {item.done}/{item.need}
                         </Text>
                       </View>
                       <TouchableOpacity
                         style={{
-                          margin: 9,
-                          position: 'absolute',
-                          right: 10,
+                          flex: 1,
+                          alignItems: 'flex-end',
+                          justifyContent: 'center',
                         }}
                         onPress={() =>
                           navigation.push('EditPetActionScreen', {
@@ -207,11 +264,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     // borderWidth: 1,
     borderColor: 'rgba(0,0,0,0.2)',
-    alignItems: 'center',
-    justifyContent: 'center',
     padding: 18,
     backgroundColor: '#fff',
-    borderRadius: 0,
+    flexDirection: 'row',
   },
   actionsCompbutton: {
     borderWidth: 2,
